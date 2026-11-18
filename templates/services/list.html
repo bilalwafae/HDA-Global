@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Nos Services BTP & Prestations TCE — H.D.A GLOBAL{% endblock %}
+
+{% block content %}
+<div class="bg-slate-50 min-h-screen py-10">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+
+    <!-- Page Header & Breadcrumb -->
+    <div class="mb-10 text-center max-w-3xl mx-auto">
+      <nav class="flex items-center justify-center gap-2 text-xs text-slate-500 mb-3 font-medium" aria-label="Breadcrumb">
+        <a href="{% url 'core:home' %}" class="hover:text-primary transition-colors flex items-center gap-1">
+          <span class="material-symbols-outlined text-[15px]">home</span>
+          <span>Accueil</span>
+        </a>
+        <span>/</span>
+        <span class="text-secondary font-semibold">Services TCE</span>
+      </nav>
+
+      <div class="inline-flex items-center px-4 py-1 rounded-full bg-orange-100 text-secondary text-xs font-bold uppercase tracking-wider mb-3">
+        CATALOGUE OFFICIEL BTP
+      </div>
+
+      <h1 class="font-display text-3xl sm:text-4xl font-extrabold text-primary tracking-tight">
+        Nos Prestations BTP &amp; Construction TCE
+      </h1>
+      <p class="text-xs sm:text-sm text-slate-600 mt-2 max-w-2xl mx-auto leading-relaxed">
+        Découvrez l'ensemble de nos domaines d'expertise pour vos travaux de bâtiment, du gros œuvre aux finitions haut de gamme à Mohammedia, Casablanca et partout au Maroc.
+      </p>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+      {% for service in services %}
+      <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+        <div>
+          <!-- Card Image Container -->
+          <div class="relative h-52 w-full overflow-hidden bg-slate-100">
+            {% if service.image_principale %}
+            <img alt="{{ service.nom }}" class="w-full h-full object-cover rounded-t-2xl group-hover:scale-105 transition-transform duration-500" src="{{ service.image_principale.url }}">
+            {% else %}
+            <div class="w-full h-full flex items-center justify-center bg-slate-200 text-slate-400">
+              <span class="material-symbols-outlined text-[48px]">construction</span>
+            </div>
+            {% endif %}
+            <div class="absolute top-3 right-3 bg-primary text-white px-3 py-1 rounded-xl text-xs font-bold shadow-sm">
+              {{ service.prix_affiche }}
+            </div>
+          </div>
+
+          <!-- Card Content -->
+          <div class="p-6 pb-2">
+            <h2 class="text-lg font-bold text-primary mb-2 group-hover:text-secondary transition-colors font-display">
+              {{ service.nom }}
+            </h2>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              {{ service.description_courte }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Card Actions -->
+        <div class="p-6 pt-3">
+          <div class="grid grid-cols-2 gap-3 pt-3 border-t border-slate-100">
+            <a class="inline-flex items-center justify-center py-2.5 px-3 rounded-xl text-xs font-semibold text-primary bg-white border border-slate-300 hover:bg-slate-50 transition-colors" href="{% url 'services:detail' service.slug %}">
+              Détails &amp; Étapes
+            </a>
+            <a class="inline-flex items-center justify-center gap-1 py-2.5 px-3 rounded-xl text-xs font-bold text-white bg-secondary hover:bg-secondary-hover shadow-xs transition-colors" href="{% url 'demandes:create' %}?service={{ service.slug }}">
+              <span>Devis</span>
+              <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-span-3 text-center py-16 bg-white rounded-2xl border border-slate-200 p-8">
+        <span class="material-symbols-outlined text-slate-400 text-[48px] mb-2">inventory_2</span>
+        <h3 class="text-base font-bold text-primary">Aucune prestation répertoriée</h3>
+        <p class="text-xs text-slate-500 mt-1">Les services apparaîtront dès leur activation en back-office.</p>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Bottom Multi-lots Call To Action Banner -->
+    <div class="bg-gradient-to-r from-primary via-[#0F254A] to-[#1E3A6C] rounded-3xl p-8 lg:p-12 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="relative z-10 max-w-2xl">
+        <span class="text-xs uppercase font-extrabold text-orange-400 tracking-wider">PROJET SUR MESURE</span>
+        <h3 class="font-display text-2xl lg:text-3xl font-extrabold mt-1">Vous avez un chantier combinant plusieurs corps d'état ?</h3>
+        <p class="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed">
+          Nos conducteurs de travaux évaluent l'ensemble de votre projet et établissent un devis global TCE décomposé poste par poste.
+        </p>
+      </div>
+      <div class="relative z-10 flex flex-wrap items-center gap-3 shrink-0">
+        <a href="{% url 'demandes:create' %}" class="px-6 py-3.5 rounded-xl font-bold text-white bg-secondary hover:bg-secondary-hover shadow-md transition-all text-xs sm:text-sm">
+          Demande Multi-lots TCE
+        </a>
+        <a href="https://wa.me/212661103988" target="_blank" class="px-5 py-3.5 rounded-xl font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-sm transition-colors text-xs sm:text-sm flex items-center gap-2">
+          <span class="material-symbols-outlined text-[18px] text-emerald-400">chat</span>
+          <span>Conseiller Direct</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

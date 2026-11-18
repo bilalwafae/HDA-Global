@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="mx-auto max-w-xl px-4 py-16 text-center">
+  <h1 class="text-2xl font-bold text-slate-900">Ce lien de suivi a expiré</h1>
+  <p class="mt-4 text-slate-600">Pour la sécurité de vos informations, le lien de suivi n'est plus actif après une longue période sans activité sur le dossier.</p>
+  <p class="mt-2 text-slate-600">Contactez H.D.A GLOBAL en rappelant votre numéro de dossier : nous vous enverrons un nouveau lien.</p>
+  <a href="{% url 'core:contact' %}" class="mt-8 inline-block rounded-xl bg-orange-500 px-6 py-3 font-bold text-white">Nous contacter</a>
+</section>
+{% endblock %}

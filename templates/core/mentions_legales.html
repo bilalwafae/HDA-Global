@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Mentions Légales — H.D.A GLOBAL{% endblock %}
+
+{% block content %}
+<div class="bg-light py-5 border-bottom">
+    <div class="container">
+        <h1 class="fw-bold mb-1">Mentions Légales & CGV</h1>
+        <p class="text-muted mb-0">Informations juridiques de la société H.D.A GLOBAL SARL.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="card border-0 shadow-sm p-4 p-md-5 rounded-4">
+                <h4 class="fw-bold text-primary mb-3">1. Identification de l'entreprise</h4>
+                <p>
+                    <strong>Raison sociale :</strong> {{ parametres.nom_entreprise }}<br>
+                    <strong>Forme juridique :</strong> Société à Responsabilité Limitée (SARL)<br>
+                    <strong>Siège social :</strong> {{ parametres.adresse_siege }}<br>
+                    <strong>Bureaux d'exploitation :</strong> {{ parametres.adresse_casablanca }}<br>
+                    <strong>Téléphone :</strong> {{ parametres.telephone }}<br>
+                    <strong>Email :</strong> {{ parametres.email_contact }}<br>
+                    <strong>Activité :</strong> Travaux de construction Tous Corps d'État (TCE), rénovation et aménagement.
+                </p>
+
+                <hr class="my-4">
+
+                <h4 class="fw-bold text-primary mb-3">2. Conditions Générales d'Établissement des Devis</h4>
+                <p>
+                    Les devis émis par H.D.A GLOBAL sont valables pendant une durée de <strong>{{ parametres.validite_devis_jours }} jours</strong> à compter de leur date d'émission. Passé ce délai, les tarifs des matériaux et prestations peuvent faire l'objet d'une révision.
+                </p>
+                <p>
+                    Les prix sont exprimés en Dirhams marocains (MAD) Hors Taxes (HT) et Toutes Taxes Comprises (TTC) selon le taux légal de TVA en vigueur (<strong>{{ parametres.tva_defaut }}%</strong>).
+                </p>
+
+                <hr class="my-4">
+
+                <h4 class="fw-bold text-primary mb-3">3. Protection des Données Personnelles</h4>
+                <p>
+                    Conformément aux lois applicables au Maroc relatives à la protection des personnes physiques à l'égard du traitement des données à caractère personnel, les informations collectées lors de la demande de devis (nom, email, téléphone, adresse de chantier) sont strictement utilisées pour le traitement de votre dossier commercial et ne sont en aucun cas cédées à des tiers.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

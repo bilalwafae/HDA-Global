@@ -1,0 +1,20 @@
+# HTTPS automatique (certificat Let's Encrypt) pour le domaine défini dans DOMAIN
+{$DOMAIN} {
+	encode zstd gzip
+
+	# images de services (publiques) servies directement
+	handle /media/services/* {
+		root * /srv
+		file_server
+	}
+
+	# tout le reste (site, admin, médias privés) : application Django
+	handle {
+		reverse_proxy web:8000
+	}
+
+	header {
+		X-Content-Type-Options nosniff
+		-Server
+	}
+}

@@ -1,0 +1,63 @@
+# Production : PostgreSQL + gunicorn + Caddy (HTTPS automatique Let's Encrypt)
+# Lancement :  docker compose -f docker-compose.prod.yml up -d --build
+# Variables lues dans le fichier .env du serveur (voir .env.prod.example et docs/DEPLOIEMENT.md)
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-hda_db}
+      POSTGRES_USER: ${POSTGRES_USER:-hda_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Définissez POSTGRES_PASSWORD dans .env}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-hda_user}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    restart: always
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py collectstatic --noinput &&
+             exec gunicorn hda_project.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 60
+             --access-logfile - --error-logfile -"
+    env_file:
+      - .env
+    environment:
+      USE_SQLITE: "False"
+      DEBUG: "False"
+      DB_HOST: db
+    volumes:
+      - media_files:/app/media
+    expose:
+      - "8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  caddy:
+    image: caddy:2-alpine
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN:?Définissez DOMAIN dans .env (ex. hda-global.ma)}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - media_files:/srv/media:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  media_files:
+  caddy_data:
+  caddy_config:

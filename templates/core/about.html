@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}À propos de H.D.A GLOBAL — Entreprise BTP TCE Maroc{% endblock %}
+
+{% block content %}
+<div class="flex flex-col w-full">
+
+  <!-- HERO : En-tête de page cohérent avec l'accueil -->
+  <section class="relative bg-[#0b1c38] text-white overflow-hidden pt-36 pb-20">
+    <div class="absolute inset-0 bg-cover bg-center pointer-events-none" style="background-image: url('{% static 'img/hero_btp.jpg' %}');"></div>
+    <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(90deg, rgba(0, 16, 45, 0.92) 0%, rgba(0, 16, 45, 0.78) 55%, rgba(0, 16, 45, 0.55) 100%);"></div>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+      <!-- Fil d'Ariane -->
+      <div class="flex items-center gap-1.5 text-xs text-slate-300 mb-4">
+        <a class="hover:text-white hover:underline transition-colors" href="{% url 'core:home' %}">Accueil</a>
+        <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+        <span class="text-secondary font-semibold">À propos</span>
+      </div>
+
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-secondary/50 bg-secondary/15 w-fit backdrop-blur-sm mb-4">
+        <span class="material-symbols-outlined text-secondary text-[16px]">history_edu</span>
+        <span class="text-xs uppercase font-extrabold tracking-wider text-orange-400">NOTRE HISTOIRE &amp; NOS VALEURS</span>
+      </div>
+
+      <h1 class="font-display text-[34px] sm:text-[44px] font-extrabold text-white tracking-tight leading-[1.15] max-w-3xl">
+        Qui sommes-nous ? <span class="text-secondary">L'excellence BTP</span> depuis Beni Yakhlef
+      </h1>
+      <p class="text-sm sm:text-base text-slate-200 leading-relaxed max-w-2xl mt-3">
+        Implantée à Beni Yakhlef (Mohammedia) et présente à Casablanca, H.D.A GLOBAL SARL est une entreprise marocaine spécialisée dans le bâtiment Tous Corps d'État (TCE) et l'aménagement clé en main.
+      </p>
+
+      <!-- Chiffres clés -->
+      <div class="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl border-t border-white/10 mt-6">
+        <div class="flex flex-col">
+          <span class="font-display text-2xl lg:text-3xl font-extrabold text-secondary">6</span>
+          <span class="text-xs text-slate-300">Corps de métiers intégrés</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-display text-2xl lg:text-3xl font-extrabold text-secondary">100%</span>
+          <span class="text-xs text-slate-300">Engagement qualité &amp; sécurité</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-display text-2xl lg:text-3xl font-extrabold text-secondary">2</span>
+          <span class="text-xs text-slate-300">Agences (Mohammedia &amp; Casa)</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-display text-2xl lg:text-3xl font-extrabold text-secondary">24–48h</span>
+          <span class="text-xs text-slate-300">Réactivité devis &amp; étude</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSION & PRESENTATION -->
+  <section class="max-w-7xl mx-auto px-6 lg:px-12 py-16 w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+      <!-- Left : Mission -->
+      <div class="lg:col-span-7 flex flex-col gap-6">
+        <div>
+          <div class="inline-flex items-center px-4 py-1 rounded-full bg-orange-100 text-secondary text-xs font-bold uppercase tracking-wider mb-3">
+            NOTRE MISSION
+          </div>
+          <h2 class="font-display text-2xl lg:text-3xl font-extrabold text-primary tracking-tight mb-3">
+            Une gestion de chantier rigoureuse, sans surprise
+          </h2>
+          <p class="text-sm text-slate-700 leading-relaxed mb-3">
+            Notre mission est d'apporter aux <strong>maîtres d'ouvrage particuliers</strong>, <strong>promoteurs</strong> et <strong>entreprises industrielles</strong> une gestion de chantier rigoureuse, sans intermédiaire superflu, avec une traçabilité totale sur les coûts et les délais d'exécution.
+          </p>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            De la première esquisse à la remise des clés, un interlocuteur unique coordonne l'ensemble des corps d'état : gros œuvre, second œuvre, techniques et finitions, selon les normes marocaines en vigueur.
+          </p>
+        </div>
+
+        <!-- 4 Valeurs Piliers en cartes -->
+        <h3 class="font-display text-lg font-extrabold text-primary font-display pt-2">Nos 4 Valeurs Piliers</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Valeur 1 -->
+          <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-blue-50 text-primary flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[24px]">shield</span>
+            </div>
+            <div class="flex flex-col">
+              <h4 class="text-sm font-bold text-primary font-display">Rigueur &amp; Sécurité</h4>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                Respect strict des normes DTU de construction et port des équipements de protection individuelle (EPI) sur chaque chantier.
+              </p>
+            </div>
+          </div>
+          <!-- Valeur 2 -->
+          <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-orange-50 text-secondary flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[24px]">event_available</span>
+            </div>
+            <div class="flex flex-col">
+              <h4 class="text-sm font-bold text-primary font-display">Respect des Délais</h4>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                Un calendrier d'intervention ferme défini lors de l'étude préalable, avec des comptes-rendus réguliers tout au long des travaux.
+              </p>
+            </div>
+          </div>
+          <!-- Valeur 3 -->
+          <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-orange-50 text-secondary flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[24px]">payments</span>
+            </div>
+            <div class="flex flex-col">
+              <h4 class="text-sm font-bold text-primary font-display">Transparence Financière</h4>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                Des devis clairs et déterministes, calculés poste par poste, sans mauvaise surprise ni frais cachés.
+              </p>
+            </div>
+          </div>
+          <!-- Valeur 4 -->
+          <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-blue-50 text-primary flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[24px]">workspace_premium</span>
+            </div>
+            <div class="flex flex-col">
+              <h4 class="text-sm font-bold text-primary font-display">Qualité des Matériaux</h4>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                Sélection rigoureuse des meilleurs agrégats, ciments, peintures et équipements sanitaires du marché marocain.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right : Carte identité & contact -->
+      <div class="lg:col-span-5 flex flex-col gap-6">
+        <div class="bg-primary text-white rounded-2xl p-6 sm:p-7 shadow-lg relative overflow-hidden">
+          <div class="absolute -right-16 -bottom-16 w-56 h-56 rounded-full bg-secondary/15 blur-3xl pointer-events-none"></div>
+          <div class="relative z-10 flex flex-col gap-4">
+            <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
+              <span class="material-symbols-outlined text-[26px] text-secondary">apartment</span>
+            </div>
+            <div>
+              <h3 class="font-display text-lg font-bold">H.D.A GLOBAL SARL</h3>
+              <span class="text-[11px] uppercase tracking-widest text-slate-400 font-semibold">CONSTRUCTION TCE &amp; AMÉNAGEMENT</span>
+            </div>
+            <ul class="flex flex-col gap-3 text-xs text-slate-200">
+              <li class="flex items-start gap-2.5">
+                <span class="material-symbols-outlined text-secondary text-[18px] mt-0.5">location_on</span>
+                <span>Siège : Beni Yakhlef, Mohammedia 28810</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="material-symbols-outlined text-secondary text-[18px] mt-0.5">domain</span>
+                <span>Bureau : 11, rue Ahmed Sitou, Bd Mohamed V, Casablanca 20000</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="material-symbols-outlined text-secondary text-[18px] mt-0.5">schedule</span>
+                <span>Lundi – Samedi : 8h00 – 18h30</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="material-symbols-outlined text-secondary text-[18px] mt-0.5">call</span>
+                <a class="font-bold text-white hover:text-secondary transition-colors" href="tel:+212661103988">+212 661 103 988</a>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="material-symbols-outlined text-secondary text-[18px] mt-0.5">mail</span>
+                <a class="hover:text-secondary transition-colors" href="mailto:hda.global82@gmail.com">hda.global82@gmail.com</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Zones d'intervention -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="material-symbols-outlined text-secondary text-[24px]">map</span>
+            <h3 class="text-base font-bold text-primary font-display">Zones d'Intervention</h3>
+          </div>
+          <p class="text-xs text-slate-600 mb-4 leading-relaxed">
+            Nos équipes mobiles interviennent sur l'axe économique Casablanca – Mohammedia et régions limitrophes :
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold">Beni Yakhlef (Siège)</span>
+            <span class="px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold">Mohammedia</span>
+            <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs">Casablanca</span>
+            <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs">Berrechid</span>
+            <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs">Settat</span>
+            <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs">El Jadida</span>
+            <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs">Benslimane</span>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <a class="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold text-white bg-secondary hover:bg-secondary-hover shadow-lg shadow-orange-950/20 transition-all transform hover:-translate-y-0.5 active:scale-95 text-sm" href="{% url 'demandes:create' %}">
+          <span class="material-symbols-outlined text-[20px]">assignment</span>
+          <span>Demander un devis gratuit</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANDEAU CONFIANCE -->
+  <section class="bg-slate-50 py-10 w-full border-y border-slate-200/70">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+      <div class="flex flex-col items-center gap-2">
+        <span class="material-symbols-outlined text-secondary text-[30px]">verified_user</span>
+        <h4 class="text-sm font-bold text-primary font-display">Garantie Décennale</h4>
+        <p class="text-xs text-slate-600 max-w-xs">Responsabilité Civile Professionnelle sur l'ensemble de nos chantiers.</p>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <span class="material-symbols-outlined text-secondary text-[30px]">engineering</span>
+        <h4 class="text-sm font-bold text-primary font-display">Direction TCE Intégrée</h4>
+        <p class="text-xs text-slate-600 max-w-xs">Tous les corps d'état coordonnés par un conducteur de travaux dédié.</p>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <span class="material-symbols-outlined text-secondary text-[30px]">gavel</span>
+        <h4 class="text-sm font-bold text-primary font-display">Conformité NM &amp; RTCM</h4>
+        <p class="text-xs text-slate-600 max-w-xs">Travaux exécutés dans le respect des normes marocaines en vigueur.</p>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

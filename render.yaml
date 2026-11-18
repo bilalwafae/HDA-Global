@@ -1,0 +1,39 @@
+# Déploiement gratuit sur Render depuis GitHub : New + > Blueprint > choisir le dépôt.
+services:
+  - type: web
+    name: hda-global
+    runtime: docker
+    plan: free
+    healthCheckPath: /
+    dockerCommand: >
+      sh -c "python manage.py migrate --noinput &&
+      python manage.py collectstatic --noinput &&
+      python manage.py load_demo_data &&
+      gunicorn hda_project.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
+      - key: DB_HOST
+        fromDatabase: {name: hda-db, property: host}
+      - key: DB_PORT
+        fromDatabase: {name: hda-db, property: port}
+      - key: POSTGRES_DB
+        fromDatabase: {name: hda-db, property: database}
+      - key: POSTGRES_USER
+        fromDatabase: {name: hda-db, property: user}
+      - key: POSTGRES_PASSWORD
+        fromDatabase: {name: hda-db, property: password}
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+
+databases:
+  - name: hda-db
+    plan: free
+    databaseName: hda
+    user: hda

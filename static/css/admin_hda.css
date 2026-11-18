@@ -1,0 +1,1207 @@
+/*
+ * admin_hda.css — Back-office Django Admin « H.D.A GLOBAL » (bleu/orange)
+ * Chargé par templates/admin/base_site.html (block extrahead + block responsive
+ * pour rester le DERNIER after responsive.css). Aucune logique modifiée.
+ *
+ * Sections :
+ *   A. Variables & thème clair forcé
+ *   B. Liens & icônes Add/Change
+ *   C. Menu latéral (nav-sidebar)
+ *   D. Boutons
+ *   E. Tableaux & listes de changement
+ *   F. Formulaires, inlines, messages
+ *   G. En-tête (logo + pilule tableau de bord)
+ *   H. Accueil (dashboard)
+ *   I. Connexion
+ *   J. Badges de statut
+ *   K. Responsive & a11y
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * A. VARIABLES — thème CLAIR FORCÉ
+ * Redéfinition de TOUTES les variables administrateur Django 5.1 :
+ *   - html[data-theme="light"]/:root (dominant la définition de base.css)
+ *   - html[data-theme="auto"] et html[data-theme="dark"]
+ *     (nez a nez avec dark_mode.css — nous avons priorité au chargement)
+ *   - @media (prefers-color-scheme: dark) — sur chaque scope aussi, pour
+ *     neutraliser le sombre forcé du navigateur.
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+/* Charte projet réutilisable */
+:root, html[data-theme="auto"], html[data-theme="light"], html[data-theme="dark"] {
+    --hda-bleu: #1E3A8A;
+    --hda-bleu-moyen: #1E5BB8;
+    --hda-orange: #F97316;
+    --hda-orange-hover: #EA580C;
+    --hda-orange-fonce: #C2410C;
+    --hda-fond: #F4F7FB;
+    --hda-texte: #0F172A;
+    --hda-texte-2: #475569;
+    --hda-texte-3: #64748B;
+    --hda-bordure: #E2E8F0;
+    --hda-carte: #FFFFFF;
+    --hda-bleu-10: #EAF0FB;
+    --hda-survol: #F1F5F9;
+
+    color-scheme: light;
+}
+
+/* Les variables Django : mêmes 4 scopes */
+html[data-theme="light"],
+:root,
+html[data-theme="auto"],
+html[data-theme="dark"] {
+    color-scheme: light;
+
+    /* Généraux */
+    --primary: #1E5BB8;
+    --secondary: #1E3A8A;
+    --accent: #F97316;
+    --primary-fg: #FFFFFF;
+
+    --body-fg: #0F172A;
+    --body-bg: #F4F7FB;
+    --body-quiet-color: #64748B;
+    --body-medium-color: #475569;
+    --body-loud-color: #0F172A;
+
+    /* En-tête : liseré géré à part (dégradé + orange) */
+    --header-color: #1E3A8A;
+    --header-branding-color: #FFFFFF;
+    --header-bg: #1E3A8A;
+    --header-link-color: #FFFFFF;
+
+    /* Fils d'Ariane */
+    --breadcrumbs-fg: #64748B;
+    --breadcrumbs-link-fg: #1E5BB8;
+    --breadcrumbs-bg: #FFFFFF;
+
+    /* Liens */
+    --link-fg: #1E3A8A;
+    --link-hover-color: #EA580C;
+    --link-selected-fg: #1E3A8A;
+
+    /* Bordures */
+    --hairline-color: #E2E8F0;
+    --border-color: #E2E8F0;
+
+    /* Messages */
+    --error-fg: #B91C1C;
+    --message-success-bg: #F0FDF4;
+    --message-warning-bg: #FFF7ED;
+    --message-error-bg: #FEF2F2;
+
+    /* Fonds divers */
+    --darkened-bg: #FAFCFF;
+    --selected-bg: #EAF0FB;
+    --selected-row: #EAF0FB;
+
+    /* Boutons */
+    --button-fg: #FFFFFF;
+    --button-bg: #1E3A8A;          /* Search, Go … : bleu principal */
+    --button-hover-bg: #1E5BB8;
+    --default-button-bg: #1E3A8A;  /* Save : bleu principal */
+    --default-button-hover-bg: #1E5BB8;
+    --close-button-bg: #F1F5F9;    /* secondary: gris clair */
+    --close-button-hover-bg: #E2E8F0;
+    --delete-button-bg: #DC2626;
+    --delete-button-hover-bg: #B91C1C;
+
+    /* Object-tools */
+    --object-tools-fg: #FFFFFF;
+    --object-tools-bg: #1E3A8A;
+    --object-tools-hover-bg: #1E5BB8;
+
+    --font-family-primary: "Plus Jakarta Sans", "Segoe UI", system-ui,
+        Roboto, "Helvetica Neue", Arial, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+}
+
+/* Somme : le navigateur force prefers-color-scheme: dark (Brave etc.)
+   → on garde les variables CLAIRES sans exception. */
+@media (prefers-color-scheme: dark) {
+    :root, html[data-theme="auto"], html[data-theme="light"], html[data-theme="dark"] {
+        color-scheme: light;
+
+        --primary: #1E5BB8;
+        --secondary: #1E3A8A;
+        --accent: #F97316;
+        --primary-fg: #FFFFFF;
+
+        --body-fg: #0F172A;
+        --body-bg: #F4F7FB;
+        --body-quiet-color: #64748B;
+        --body-medium-color: #475569;
+        --body-loud-color: #0F172A;
+
+        --header-color: #1E3A8A;
+        --header-branding-color: #FFFFFF;
+        --header-bg: #1E3A8A;
+        --header-link-color: #FFFFFF;
+
+        --breadcrumbs-fg: #64748B;
+        --breadcrumbs-link-fg: #1E5BB8;
+        --breadcrumbs-bg: #FFFFFF;
+
+        --link-fg: #1E3A8A;
+        --link-hover-color: #EA580C;
+        --link-selected-fg: #1E3A8A;
+
+        --hairline-color: #E2E8F0;
+        --border-color: #E2E8F0;
+
+        --error-fg: #B91C1C;
+        --message-success-bg: #F0FDF4;
+        --message-warning-bg: #FFF7ED;
+        --message-error-bg: #FEF2F2;
+
+        --darkened-bg: #FAFCFF;
+        --selected-bg: #EAF0FB;
+        --selected-row: #EAF0FB;
+
+        --button-fg: #FFFFFF;
+        --button-bg: #1E3A8A;
+        --button-hover-bg: #1E5BB8;
+        --default-button-bg: #1E3A8A;
+        --default-button-hover-bg: #1E5BB8;
+        --close-button-bg: #F1F5F9;
+        --close-button-hover-bg: #E2E8F0;
+        --delete-button-bg: #DC2626;
+        --delete-button-hover-bg: #B91C1C;
+
+        --object-tools-fg: #FFFFFF;
+        --object-tools-bg: #1E3A8A;
+        --object-tools-hover-bg: #1E5BB8;
+    }
+}
+
+/* Le bouton de bascule de thème : masqué (thème clair forcé partout) */
+button.theme-toggle, .theme-toggle {
+    display: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * Base générale
+ * ═══════════════════════════════════════════════════════════════════════ */
+body {
+    font-family: var(--font-family-primary) !important;
+    background: var(--hda-fond) !important;
+    color: var(--hda-texte) !important;
+    font-size: .9rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * B. LIENS & icônes Add / Change
+ * ═══════════════════════════════════════════════════════════════════════ */
+a:link, a:visited {
+    color: var(--hda-bleu) !important;
+}
+a:hover {
+    color: var(--hda-orange-hover) !important;
+}
+a:focus {
+    outline: 2px dashed rgba(245, 115, 22, 0.7) !important;
+    outline-offset: 1px;
+}
+
+/* Icônes recolorées via SVG data-URI (les originales sont teintées
+   vert #5fa225 / ambre #b48c08) */
+.addlink, a.addlink:link, a.addlink:visited {
+    color: #C2410C !important;
+    font-weight: 700 !important;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 1792 1792'%3E%3Cpath fill='%23C2410C' d='M1600 796v192q0 40-28 68t-68 28h-416v416q0 40-28 68t-68 28h-192q-40 0-68-28t-28-68v-416h-416q-40 0-68-28t-28-68v-192q0-40 28-68t68-28h416v-416q0-40 28-68t68-28h192q40 0 68 28t28 68v416h416q40 0 68 28t28 68z'/%3E%3C/svg%3E") 0 1px no-repeat !important;
+}
+.changelink, .inlinechangelink,
+a.changelink:link, a.changelink:visited {
+    color: #1E5BB8 !important;
+    font-weight: 700 !important;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 1792 1792'%3E%3Cpath fill='%231E5BB8' d='M491 1536l91-91-235-235-91 91v107h128v128h107zm523-928q0-22-22-22-10 0-17 7l-542 542q-7 7-7 17 0 22 22 22 10 0 17-7l542-542q7-7 7-17zm-54-192l416 416-832 832h-416v-416zm683 96q0 53-37 90l-166 166-416-416 166-165q36-38 90-38 53 0 91 38l235 234q37 39 37 91z'/%3E%3C/svg%3E") 0 1px no-repeat !important;
+}
+.deletelink, a.deletelink:link, a.deletelink:visited {
+    color: #DC2626 !important;
+    font-weight: 700 !important;
+}
+/* Dans la submit-row, le bouton « Supprimer » a un fond rouge :
+   son texte DOIT rester blanc */
+.submit-row a.deletelink, .submit-row p.deletelink-box a {
+    background: #DC2626 !important;
+    color: #FFFFFF !important;
+}
+.submit-row a.deletelink:hover {
+    background: #B91C1C !important;
+    color: #FFFFFF !important;
+}
+a.addlink:hover { color: #9A3412 !important; }
+a.changelink:hover { color: #1E3A8A !important; }
+a.deletelink:hover { color: #B91C1C !important; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * C. MENU LATÉRAL (nav-sidebar)
+ * Fond blanc, bordure légère ; élément actif = bleu clair + barre orange.
+ * ═══════════════════════════════════════════════════════════════════════ */
+#nav-sidebar {
+    background: #FFFFFF !important;
+    border-right: 1px solid var(--hda-bordure) !important;
+}
+
+.toggle-nav-sidebar {
+    background: #FFFFFF !important;
+    color: var(--hda-bleu) !important;
+    border-right: 1px solid var(--hda-bordure) !important;
+}
+.toggle-nav-sidebar:hover, .toggle-nav-sidebar:focus {
+    background: var(--hda-survol) !important;
+}
+
+/* Titres de modules : BLEU sur BLEU PÂLE — lisibles (WCAG AA) */
+#nav-sidebar .module h2,
+#nav-sidebar .module caption,
+.module h2,
+.module caption,
+.inline-group h2 {
+    background: var(--hda-bleu-10) !important;
+    color: var(--hda-bleu) !important;
+    font-weight: 800 !important;
+    font-size: .74rem !important;
+    letter-spacing: .6px !important;
+    text-transform: uppercase !important;
+    padding: 9px 12px !important;
+    border-bottom: 1px solid var(--hda-bordure) !important;
+}
+/* Le titre couvre TOUTE la largeur de la carte (pas seulement la 1re colonne) */
+.module caption { display: table-caption !important; width: auto; caption-side: top; text-align: left; }
+#nav-sidebar .module caption, #nav-sidebar table caption { display: block !important; }
+
+/* Le lien « section » du caption (accueil + sidebar actif) */
+caption a.section:link,
+caption a.section:visited,
+#nav-sidebar .current-app .section:link,
+#nav-sidebar .current-app .section:visited {
+    color: var(--hda-bleu) !important;
+    font-weight: 800 !important;
+    letter-spacing: .6px !important;
+    text-transform: uppercase !important;
+    font-size: .74rem !important;
+    background: transparent !important;
+}
+caption a.section:hover,
+#nav-sidebar .current-app .section:hover {
+    color: var(--hda-orange-hover) !important;
+}
+
+#nav-sidebar .module th {
+    width: 100%;
+}
+#nav-sidebar table caption {
+    background: transparent !important;
+}
+
+#nav-filter {
+    background: #F1F5F9 !important;
+    border: 1px solid var(--hda-bordure) !important;
+    border-radius: 7px !important;
+    color: var(--hda-texte) !important;
+    padding: 5px 8px !important;
+}
+#nav-filter:focus {
+    border-color: var(--hda-bleu-moyen) !important;
+    box-shadow: 0 0 0 3px rgba(30, 91, 184, 0.15) !important;
+}
+
+/* Élément ACTIF : fond bleu pâle + texte bleu OU barre flank left orange 3px */
+#nav-sidebar .current-model {
+    background: var(--hda-bleu-10) !important;
+    box-shadow: inset 3px 0 0 0 var(--hda-orange) !important;
+}
+#nav-sidebar .current-model a:link,
+#nav-sidebar .current-model a:visited {
+    color: var(--hda-bleu) !important;
+    font-weight: 700 !important;
+}
+
+/* Texte des lignes du menu : foncé, 600 */
+#nav-sidebar .module th a:link,
+#nav-sidebar .module th a:visited {
+    color: var(--hda-texte) !important;
+    font-weight: 600 !important;
+    padding: 3px 12px !important;
+    display: block;
+    border-radius: 5px;
+}
+#nav-sidebar .module th a:hover {
+    background: var(--hda-survol) !important;
+    color: var(--hda-bleu) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * D. BOUTONS — homogènes site public
+ * hauteur 40, radius 10, 700 ; transition + lift; focus ring
+ * ═══════════════════════════════════════════════════════════════════════ */
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+    display: inline-block;
+    height: 40px;
+    line-height: 38px;
+    padding: 0 16px !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-family: inherit !important;
+    font-size: .82rem !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+    background: var(--hda-bleu) !important;   /* Search, Go, Oui… */
+    color: #FFFFFF !important;
+    transition: background 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+}
+.button:hover, input[type=submit]:hover, input[type=button]:hover, a.button:hover {
+    background: var(--hda-bleu-moyen) !important;
+    color: #FFFFFF !important;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(15, 23, 42, 0.18);
+}
+.button:focus, input[type=submit]:focus, input[type=button]:focus, a.button:focus {
+    outline: 2px solid rgba(245, 115, 22, 0.7) !important;
+    outline-offset: 2px;
+}
+
+/* Save (« default ») : bleu principal — accentuation douce */
+.button.default, input[type=submit].default, .submit-row input.default {
+    background: var(--hda-bleu) !important;
+    box-shadow: 0 2px 6px rgba(30, 58, 138, 0.28);
+}
+.button.default:hover, input[type=submit].default:hover {
+    background: var(--hda-bleu-moyen) !important;
+}
+
+/* Secondaire (No/cancel) : gris clair */
+a.button.cancel-link,
+input[type=button][value^='Close'],
+.submit-row .cancel-link {
+    background: var(--hda-survol) !important;
+    color: #334155 !important;
+}
+a.button.cancel-link:hover {
+    background: var(--hda-bordure) !important;
+    color: #1E293B !important;
+}
+
+/* Suppression : rouge */
+input.deletelink, .button.deletelink, a.deletelink.button {
+    background: #DC2626 !important;
+}
+input.deletelink:hover, .button.deletelink:hover {
+    background: #B91C1C !important;
+}
+.button[disabled], input[type=submit][disabled], input[type=button][disabled] {
+    background: #94A3B8 !important;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* « AJOUTER … » (object-tools addlink) : pilule orange + ombre douce */
+.object-tools li a {
+    height: 36px !important;
+    line-height: 34px !important;
+    padding: 0 16px !important;
+    border-radius: 50px !important;
+    font-weight: 700 !important;
+    font-size: .78rem !important;
+    letter-spacing: .3px;
+    box-shadow: 0 2px 6px rgba(148, 163, 184, 0.35);
+    color: #FFFFFF !important;
+    background: var(--hda-bleu) !important;
+}
+.object-tools li a:hover {
+    background: var(--hda-bleu-moyen) !important;
+    color: #FFFFFF !important;
+}
+.object-tools li a.addlink {
+    background: var(--hda-orange) !important;
+    color: #FFFFFF !important;
+}
+.object-tools li a.addlink:hover {
+    background: var(--hda-orange-hover) !important;
+    color: #FFFFFF !important;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 9px rgba(245, 115, 22, 0.4);
+}
+
+/* Widget calendrier / dates */
+.color-details .clear a,
+.calendarnow-link, .datetimeshortcuts a {
+    color: var(--hda-bleu-moyen) !important;
+    font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * E. TABLEAUX & changelists — cartes blanches, liserés doux, hover
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+/* Barre de recherche (toolbar) */
+#changelist-search input[type="text"],
+#navbar-search input[type="text"] {
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 10px !important;
+    height: 40px !important;
+    padding: 0 12px !important;
+    min-width: 220px;
+}
+#changelist-search label img, #navbar-search label img {
+    vertical-align: middle;
+    opacity: .6;
+}
+
+/* Carte du tableau */
+#changelist table, #result_list, .results table {
+    background: var(--hda-carte) !important;
+    border: none !important;
+    border-radius: 14px !important;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+}
+.results {
+    border: 1px solid var(--hda-bordure) !important;
+    border-radius: 14px !important;
+    background: var(--hda-carte) !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+    overflow: hidden;
+}
+
+/* En-têtes : en capitales niveau “petit” */
+#result_list thead th, table thead th {
+    background: #F8FAFC !important;
+    color: var(--hda-texte-2) !important;
+    text-transform: uppercase !important;
+    font-size: .7rem !important;
+    letter-spacing: .7px !important;
+    font-weight: 700 !important;
+    border: none !important;
+    border-bottom: 2px solid var(--hda-bordure) !important;
+    padding: 10px 12px !important;
+}
+#result_list thead th a:link, #result_list thead th a:visited {
+    color: var(--hda-texte-2) !important;
+    text-transform: inherit;
+}
+#result_list thead th.sorted, #result_list thead th.sorted.active {
+    background: var(--hda-bleu-10) !important;
+}
+
+/* Corps : trait doux + hover */
+#result_list tbody td, table tbody td {
+    border: none !important;
+    border-bottom: 1px solid var(--hda-bordure) !important;
+    color: var(--hda-texte) !important;
+    padding: 9px 12px !important;
+    vertical-align: middle !important;
+}
+#result_list tbody tr:hover, table tbody tr:hover {
+    background: #F8FAFF !important;
+}
+#result_list tbody a:link, #result_list tbody a:visited {
+    color: var(--hda-bleu) !important;
+}
+#result_list tbody a:hover {
+    color: var(--hda-orange-hover) !important;
+    text-decoration: underline;
+}
+/* Références (DEM-2026-0001…) : une ligne, gras bleu */
+#result_list td a.reference,
+#result_list td.field-reference,
+#result_list td.field-reference a {
+    color: var(--hda-bleu) !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+}
+#result_list td.field-reference {
+    min-width: 130px;
+}
+
+/* Actions de liste (Action : …… Envoyer) + pagination */
+.changelist .actions {
+    background: #F8FAFC !important;
+    border: 1px solid var(--hda-bordure) !important;
+    border-radius: 10px !important;
+    padding: 8px 12px !important;
+    color: var(--hda-texte-2) !important;
+}
+.changelist .actions select {
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 8px !important;
+}
+.changelist .actions .question,
+.changelist .actions .all {
+    color: var(--hda-texte-2) !important;
+    font-weight: 600;
+}
+
+/* Pagination */
+.paginator, .pagination {
+    text-align: right;
+    padding-right: 4px;
+}
+.paginator input[type="text"], .pagination input[type="text"] {
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 8px !important;
+}
+
+/* Général tables dashboard / recent actions row borders douces */
+.module table th, .module table td {
+    border-color: var(--hda-bordure) !important;
+}
+
+/* Liens « date hierarchy » (2026, 20 octobre...) : gras bleu nowrap */
+#changelist .toplinks {
+    color: var(--hda-texte-3);
+    font-size: .82rem;
+}
+#changelist .toplinks a:link,
+#changelist .toplinks a:visited {
+    color: var(--hda-bleu) !important;
+    font-weight: 700;
+    white-space: nowrap;
+}
+#changelist .toplinks a:hover {
+    color: var(--hda-orange-hover) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * F. FILTRES latéraux (sidebar droite)
+ * ═══════════════════════════════════════════════════════════════════════ */
+#changelist-filter {
+    background: var(--hda-carte) !important;
+    border: 1px solid var(--hda-bordure) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 1px 6px rgba(15, 23, 42, 0.05) !important;
+    padding: 10px 14px !important;
+}
+#changelist-filter h2 {
+    font-size: .75rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: .6px !important;
+    color: var(--hda-bleu) !important;
+    background: transparent !important;
+    border-bottom: none !important;
+    padding: 4px 0 !important;
+}
+#changelist-filter h3 {
+    font-weight: 700 !important;
+    font-size: .78rem !important;
+    color: var(--hda-bleu) !important;
+}
+#changelist-filter li {
+    color: var(--hda-texte) !important;
+}
+#changelist-filter li a:link, #changelist-filter li a:visited {
+    color: var(--hda-texte) !important;
+    font-weight: 600 !important;
+}
+#changelist-filter li a:hover {
+    color: var(--hda-bleu) !important;
+}
+#changelist-filter li.selected a:link,
+#changelist-filter li.selected a:visited {
+    color: var(--hda-bleu) !important;
+    border-left: 3px solid var(--hda-orange);
+    padding-left: 6px;
+    font-weight: 700 !important;
+}
+#changelist-filter .filter-choice.selected {
+    color: var(--hda-bleu) !important;
+    font-weight: 700 !important;
+}
+#changelist-filter .filter-choice.selected::marker {
+    color: var(--hda-orange) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * G. FORMULAIRES (change), inlines, submit-row sticky
+ * ═══════════════════════════════════════════════════════════════════════ */
+fieldset.module {
+    background: var(--hda-carte) !important;
+    border: 1px solid var(--hda-bordure) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 1px 6px rgba(15, 23, 42, 0.05) !important;
+    margin-bottom: 14px !important;
+    padding: 0 !important;
+    overflow: hidden;
+}
+
+/* Champs : 40 px, radius 10, focus bleu + halo */
+input[type=text], input[type=number], input[type=email], input[type=tel],
+input[type=url], input[type=date], input[type=time], input[type=password],
+textarea, select, .vTextField, .vLargeTextField, .vURLField,
+.vDateField, .vTimeField {
+    height: 40px;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 10px;
+    padding: 0 10px !important;
+    font-family: inherit !important;
+    font-size: .85rem !important;
+    background: #FFFFFF !important;
+    color: var(--hda-texte) !important;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+textarea, .vLargeTextField {
+    height: auto !important;
+    min-height: 90px !important;
+    padding: 8px 10px !important;
+}
+select, select[multiple="multiple"] {
+    height: 40px;
+    padding: 0 6px !important;
+}
+select.multiple, select[multiple="multiple"] {
+    min-height: 120px !important;
+    padding: 6px !important;
+}
+input:focus, textarea:focus, select:focus {
+    outline: none !important;
+    border-color: var(--hda-bleu-moyen) !important;
+    box-shadow: 0 0 0 3px rgba(30, 91, 184, 0.18) !important;
+}
+
+/* Barre d'actions collée en bas */
+.submit-row {
+    background: var(--hda-carte) !important;
+    border: 1px solid var(--hda-bordure) !important;
+    border-radius: 14px !important;
+    position: sticky;
+    bottom: 12px;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12) !important;
+    padding: 12px 14px !important;
+    z-index: 60;
+}
+
+/* Erreurs inline: fields soft */
+.field-error input, .field-error textarea, input.errors {
+    border-color: #DC2626 !important;
+}
+
+/* Inlines : cartes */
+.inline-group {
+    border-radius: 14px !important;
+    border: 1px solid var(--hda-bordure) !important;
+    background: var(--hda-carte) !important;
+    box-shadow: 0 1px 6px rgba(15, 23, 42, 0.05) !important;
+    overflow: hidden;
+    margin-bottom: 14px !important;
+}
+.inline-group .module {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+.inline-group h2 {
+    background: var(--hda-bleu-10) !important;
+    color: var(--hda-bleu) !important;
+    font-size: .78rem !important;
+}
+
+/* Messages success/error */
+ul.messagelist {
+    padding: 12px 12px 0 12px;
+}
+ul.messagelist li {
+    border-radius: 10px !important;
+    border: 1px solid transparent !important;
+    font-weight: 700 !important;
+    font-size: .85rem !important;
+    padding: 10px 14px !important;
+}
+ul.messagelist li.success {
+    background: var(--message-success-bg) !important;
+    color: #14532D !important;
+    border-color: #BBF7D0 !important;
+}
+ul.messagelist li.warning {
+    background: var(--message-warning-bg) !important;
+    color: #9A3412 !important;
+    border-color: #FED7AA !important;
+}
+ul.messagelist li.error {
+    background: var(--message-error-bg) !important;
+    color: #B91C1C !important;
+    border-color: #FECACA !important;
+}
+
+.errornote, .errorlist {
+    color: #B91C1C !important;
+    background: var(--message-error-bg) !important;
+    border-radius: 8px !important;
+    padding: 8px 12px !important;
+    font-weight: 700;
+}
+
+/* Widgets date/heure */
+.datetimeshortcuts a {
+    margin-left: 5px;
+}
+span.clock, span.calendar {
+    opacity: .75;
+}
+.selector {
+    max-width: 700px;
+}
+.selector .selector-filter SELECT,
+.selector .selector-available input,
+.selector .selector-chosen input {
+    border: 1px solid var(--hda-bordure) !important;
+    border-radius: 8px !important;
+}
+
+/* Objets outils “VUE SUR LE SITE” */
+.object-tools a {
+    line-height: 32px !important;
+}
+.object-tools a.viewsitelink {
+    background: var(--hda-bleu) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * H. EN-TÊTE L’ENTÊE (dégradé + orange + logo en puce blanche)
+ *    et fils d'Ariane
+ * ═══════════════════════════════════════════════════════════════════════ */
+#header {
+    background: linear-gradient(135deg, #1E3A8A 0%, #1E5BB8 75%, #2457C9 100%) !important;
+    color: #FFFFFF !important;
+    border-bottom: 3px solid var(--hda-orange) !important;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.25);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    flex: 0 0 auto;
+    padding: 10px 24px !important;
+}
+
+#branding, #branding h1 {
+    font-size: 1.05rem;
+    font-weight: 800;
+}
+#branding h1,
+#site-name {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0 !important;
+}
+#branding a:link, #branding h1 a:visited,
+#branding h1 a:link {
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+}
+
+/* Puce blanche du logo (logo uploadé ou extrait du flyer) */
+.hda-logo-pastille {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: 58px;
+    border-radius: 12px;
+    background: #FFFFFF;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.28);
+    overflow: hidden;
+    flex: 0 0 auto;
+    padding: 4px 12px;
+}
+.hda-logo-pastille img {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+}
+.hda-sub { font-weight: 600; opacity: .9; font-size: .9rem; padding-left: 12px; border-left: 1px solid rgba(255,255,255,.4); margin-left: 4px; }
+.hda-logo-initiales {
+    font-weight: 800;
+    font-size: .95rem;
+    color: var(--hda-bleu);
+    letter-spacing: .5px;
+}
+
+/* « Tableau de bord exécutif » : pilule orange */
+.btn-dashboard-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--hda-orange) !important;
+    color: #FFFFFF !important;
+    padding: 7px 16px !important;
+    border-radius: 50px !important;
+    font-weight: 800 !important;
+    font-size: .8rem !important;
+    text-decoration: none !important;
+    box-shadow: 0 2px 6px rgba(234, 88, 12, 0.4) !important;
+    transition: background 150ms ease, transform 150ms ease !important;
+    height: auto !important;
+    line-height: 1.3 !important;
+}
+.btn-dashboard-pill:hover {
+    background: var(--hda-orange-hover) !important;
+    color: #FFFFFF !important;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 9px rgba(234, 88, 12, 0.5) !important;
+}
+
+/* Outils utilisateur */
+#user-tools {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-size: .8rem !important;
+}
+#user-tools a:link, #user-tools a:visited {
+    color: #FFFFFF !important;
+    border-bottom: none !important;
+}
+#user-tools a:hover {
+    color: var(--hda-orange) !important;
+}
+
+/* Breadcrumb */
+div.breadcrumbs {
+    background: #FFFFFF !important;
+    color: var(--hda-texte-3) !important;
+    padding: 10px 24px !important;
+    border-bottom: 1px solid var(--hda-bordure) !important;
+    font-size: .82rem !important;
+}
+div.breadcrumbs a:link, div.breadcrumbs a:visited {
+    color: var(--hda-bleu-moyen) !important;
+    font-weight: 700 !important;
+}
+div.breadcrumbs a:hover {
+    color: var(--hda-orange-hover) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * I. ACCUEIL (dashboard) : grille de cartes + actions récentes
+ * ═══════════════════════════════════════════════════════════════════════ */
+.dashboard #content-main {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 22px;
+}
+.dashboard #content-main .module {
+    margin: 0 !important;
+    border-radius: 14px !important;
+    overflow: hidden;
+    border: 1px solid var(--hda-bordure) !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06) !important;
+    background: var(--hda-carte) !important;
+    float: none;
+    width: 100%;
+}
+.dashboard #content-main .module table td {
+    background: #FFFFFF !important;
+    border-bottom: 1px solid var(--hda-bordure) !important;
+    padding: 9px 12px !important;
+}
+.dashboard #content-main .module table td:last-child {
+    text-align: right;
+    white-space: nowrap;
+}
+.dashboard #content-main .module table tr:hover td {
+    background: #F8FAFF !important;
+}
+
+/* Actions récentes */
+.recent-actions-module {
+    background: var(--hda-carte) !important;
+    border: 1px solid var(--hda-bordure) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 1px 6px rgba(15, 23, 42, 0.05) !important;
+    overflow: hidden;
+}
+.recent-actions-module h2 {
+    background: var(--hda-bleu-10) !important;
+    color: var(--hda-bleu) !important;
+    font-weight: 800 !important;
+    font-size: .78rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: .6px;
+    padding: 10px 14px !important;
+}
+.recent-actions-module h3 {
+    color: var(--hda-bleu) !important;
+    font-weight: 700 !important;
+    font-size: .84rem;
+}
+.recent-actions-module p {
+    color: var(--hda-texte-3) !important;
+    font-size: .8rem;
+}
+.recent-actions-module ul.actionlist li {
+    color: var(--hda-texte) !important;
+    font-size: .84rem;
+    padding: 6px 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * J. PAGE DE CONNEXION : carte centrée, dégradé bleu
+ * ═══════════════════════════════════════════════════════════════════════ */
+body.login, .login,
+html[data-theme="dark"] body.login {
+    background: linear-gradient(150deg, #1E3A8A 0%, #1E5BB8 60%, #2563EB 100%) !important;
+}
+body.login #header {
+    position: static;
+    background: transparent !important;
+    box-shadow: none;
+    border-bottom: none !important;
+}
+body.login #content {
+    background: #FFFFFF;
+    border-radius: 14px;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.35);
+    padding: 34px 30px !important;
+    margin-top: 6vh;
+    max-width: 430px;
+    border-top: 4px solid var(--hda-orange);
+    margin-left: auto;
+    margin-right: auto;
+}
+body.login h1 {
+    background: none !important;
+    color: var(--hda-bleu) !important;
+    font-size: 1.25rem !important;
+    font-weight: 800 !important;
+    text-transform: none;
+    border: none !important;
+    padding: 0 0 4px 0 !important;
+}
+.login .submit-row input[type="submit"] {
+    width: 100% !important;
+    background: var(--hda-orange) !important;
+    box-shadow: 0 2px 8px rgba(245, 115, 22, 0.38) !important;
+}
+.login .submit-row input[type="submit"]:hover {
+    background: var(--hda-orange-hover) !important;
+}
+.login .form-row input {
+    width: 100% !important;
+}
+.password-reset-link a {
+    color: var(--hda-texte-2) !important;
+    font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * K. BADGES de statut (classe Bootstrap compilée — Bootstrap absente)
+ *    listes demandes/devis : badge bg-*, définies ici
+ * ═══════════════════════════════════════════════════════════════════════ */
+.badge {
+    display: inline-block;
+    padding: .28em .65em;
+    font-size: .72rem;
+    font-weight: 700;
+    line-height: 1.3;
+    text-align: center;
+    vertical-align: baseline;
+    border-radius: 50px;
+    white-space: nowrap;
+}
+.badge.bg-primary { background: #1E5BB8 !important; color: #FFFFFF !important; }
+.badge.bg-info    { background: #0E9DC4 !important; color: #FFFFFF !important; }
+.badge.bg-warning { background: #F59E0B !important; color: #7C2D12 !important; }
+.badge.bg-success { background: #16A34A !important; color: #FFFFFF !important; }
+.badge.bg-danger  { background: #DC2626 !important; color: #FFFFFF !important; }
+.badge.bg-secondary { background: #64748B !important; color: #FFFFFF !important; }
+.badge.bg-dark    { background: #1E293B !important; color: #FFFFFF !important; }
+.badge.bg-muted   { background: #CBD5E1 !important; color: #334155 !important; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * L. DIVERS & mobile
+ * ═══════════════════════════════════════════════════════════════════════ */
+h1, h2, h3, h4, h5 {
+    text-transform: none !important;
+    border-top: none !important;
+}
+
+.errorlist li { list-style: none; }
+
+.skip-to-content-link {
+    background: var(--hda-bleu);
+    color: #FFFFFF;
+}
+
+/* ── Responsive : ≥ 389 px sans scroll horizontal ─────────────────────── */
+@media (max-width: 1100px) {
+    #changelist-filter { width: 200px !important; }
+}
+@media (max-width: 767px) {
+    .dashboard #content-main { grid-template-columns: 1fr; }
+    #header { padding: 10px 14px !important; position: static; }
+    .hda-logo-pastille { height: 38px; padding: 3px 8px; } .hda-logo-pastille img { height: 30px; } .hda-sub { display: none; }
+    body.login #content { margin-left: 16px; margin-right: 16px; max-width: calc(100% - 32px); }
+    .submit-row { position: static; }
+    #result_list td, #result_list th { padding: 7px 8px !important; }
+    div.breadcrumbs { padding: 8px 14px !important; }
+}
+@media (max-width: 420px) {
+    .btn-dashboard-pill { display: none; }
+}
+
+/* Mise en page “shifted” : le contenu respire quand le sidebar est ouvert */
+@media (min-width: 1024px) {
+    .main.shifted > #nav-sidebar + .content {
+        max-width: calc(100% - 276px) !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * V0.4 — BOUTONS MODERNES (Add / Change / Log out …) — apparence seule
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+/* -- Add / Change / View dans les cartes de l'accueil et le menu latéral -- */
+.module td a.addlink, .module td a.changelink, .module td a.viewlink,
+.module th + td a.addlink, #nav-sidebar td a.addlink {
+    display: inline-flex !important; align-items: center; gap: 6px;
+    padding: 5px 13px 5px 10px !important; border-radius: 999px !important;
+    font-size: .74rem !important; font-weight: 700 !important; line-height: 1.2 !important;
+    background-image: none !important; border: 1px solid transparent;
+    transition: background .15s, color .15s, border-color .15s, transform .15s, box-shadow .15s;
+    white-space: nowrap;
+}
+.module td a.addlink::before, .module td a.changelink::before, .module td a.viewlink::before {
+    content: ""; width: 12px; height: 12px; background-color: currentColor; flex: 0 0 auto;
+    -webkit-mask: var(--hda-ico) center / contain no-repeat; mask: var(--hda-ico) center / contain no-repeat;
+}
+.module td a.addlink { --hda-ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z'/%3E%3C/svg%3E");
+    background: #FFF1E6 !important; color: #C2410C !important; border-color: #FED7AA; }
+.module td a.changelink { --hda-ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 17.25V21h3.75L17.8 9.94l-3.75-3.75L3 17.25zM20.7 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z'/%3E%3C/svg%3E");
+    background: #EAF0FB !important; color: #1E3A8A !important; border-color: #CFDDF6; }
+.module td a.viewlink { --hda-ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 5C7 5 2.7 8.1 1 12c1.7 3.9 6 7 11 7s9.3-3.1 11-7c-1.7-3.9-6-7-11-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z'/%3E%3C/svg%3E");
+    background: #F1F5F9 !important; color: #334155 !important; border-color: #E2E8F0; }
+.module td a.addlink:hover { background: #F97316 !important; color: #fff !important; border-color: #F97316; transform: translateY(-1px); box-shadow: 0 6px 14px rgba(249,115,22,.3); }
+.module td a.changelink:hover { background: #1E3A8A !important; color: #fff !important; border-color: #1E3A8A; transform: translateY(-1px); box-shadow: 0 6px 14px rgba(30,58,138,.28); }
+.module td a.viewlink:hover { background: #334155 !important; color: #fff !important; border-color: #334155; }
+.module td:has(> a.addlink), .module td:has(> a.changelink) { white-space: nowrap; text-align: right; }
+.module td + td { padding-left: 4px; padding-right: 8px; }
+
+/* -- Le titre de chaque carte couvre toute la largeur -- */
+.module caption { display: table-caption !important; width: auto; text-align: left; }
+#nav-sidebar .module caption, #nav-sidebar table caption { display: block !important; }
+
+/* -- Bouton « AJOUTER … » en haut des listes : icône + -- */
+.object-tools a.addlink { background-image: none !important; display: inline-flex !important; align-items: center; gap: 8px; padding: 0 20px !important; }
+.object-tools a.addlink::before { content: "+"; font-size: 1.2rem; font-weight: 800; line-height: 1; margin-top: -1px; }
+
+/* -- Barre utilisateur : boutons « verre » + Déconnexion orange -- */
+#user-tools { font-size: 0 !important; display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 8px; text-transform: none !important; }
+#user-tools > p, #user-tools strong { font-size: .85rem; color: #fff; margin: 0 8px 0 0; letter-spacing: 0; text-transform: none; }
+#user-tools a:link, #user-tools a:visited, #user-tools button, #logout-form button {
+    display: inline-flex !important; align-items: center; font-family: inherit;
+    font-size: .72rem !important; font-weight: 700 !important; text-transform: uppercase; letter-spacing: .05em;
+    padding: 8px 15px !important; border-radius: 999px !important; cursor: pointer; text-decoration: none !important;
+    color: #fff !important; background: rgba(255,255,255,.13) !important;
+    border: 1px solid rgba(255,255,255,.3) !important; backdrop-filter: blur(4px);
+    transition: background .15s, transform .15s, box-shadow .15s;
+}
+#user-tools a:hover, #user-tools button:hover { background: rgba(255,255,255,.26) !important; color: #fff !important; transform: translateY(-1px); }
+#logout-form { display: inline-flex; margin: 0; }
+#user-tools #logout-form button, #user-tools a[href*="logout"] {
+    background: var(--hda-orange) !important; border-color: var(--hda-orange) !important; box-shadow: 0 6px 14px rgba(249,115,22,.35);
+}
+#user-tools #logout-form button:hover, #user-tools a[href*="logout"]:hover { background: var(--hda-orange-hover) !important; }
+@media (max-width: 767px) { #user-tools { justify-content: flex-start; } }
+
+/* Finitions V0.4 */
+#user-tools .theme-toggle, button.theme-toggle { display: none !important; }
+.dashboard .module th, .dashboard .module td { vertical-align: middle; background: transparent !important; }
+.dashboard .module tr:hover th, .dashboard .module tr:hover td { background: #F8FAFF !important; }
+#content > h1, .dashboard #content > h1 { font-weight: 800 !important; color: var(--hda-ink); }
+
+/* Page de connexion : carte propre, logo centré, titre « Administration » */
+body.login #container { background: #fff !important; border-radius: 22px !important; overflow: hidden; box-shadow: 0 30px 70px rgba(10,25,60,.45) !important; width: min(440px, 92vw); }
+body.login #header { background: #fff !important; box-shadow: none !important; position: static !important; display: block !important; text-align: center; padding: 30px 24px 8px !important; border-bottom: 0 !important; }
+body.login #branding h1, body.login #site-name { display: flex !important; flex-direction: column; align-items: center; gap: 10px; margin: 0; }
+body.login .btn-dashboard-pill { display: none !important; }
+body.login .hda-logo-pastille { box-shadow: none; height: 72px; padding: 0; background: transparent; }
+body.login .hda-logo-pastille img { height: 64px; }
+body.login .hda-sub { color: var(--hda-bleu) !important; border: 0 !important; padding: 0 !important; margin: 0 !important; font-size: 1.15rem; font-weight: 800; opacity: 1; letter-spacing: .02em; }
+body.login #content { padding: 10px 32px 34px !important; background: #fff; }
+body.login #content-main, body.login #content { width: auto; }
+body.login .form-row label { font-weight: 700; color: #334155; }
+body.login .submit-row { box-shadow: none !important; border: 0 !important; padding: 8px 0 0 !important; position: static !important; background: transparent !important; }
+body.login .submit-row input[type=submit] { width: 100%; padding: 13px !important; background: var(--hda-orange) !important; }
+body.login .submit-row input[type=submit]:hover { background: var(--hda-orange-hover) !important; }
+body.login #branding a:not(.btn-dashboard-pill) { display: flex !important; flex-direction: column; align-items: center; gap: 6px; }
+body.login #header { padding-bottom: 18px !important; min-height: 0 !important; height: auto !important; }
+body.login .form-row { padding: 6px 0 !important; border: 0 !important; }
+body.login .form-row input[type=text], body.login .form-row input[type=password] { width: 100% !important; box-sizing: border-box; }
+body.login .submit-row input[type=submit] { height: 46px; line-height: 1 !important; padding-top: 0 !important; padding-bottom: 0 !important; }
+
+body.login #content-main, body.login #login-form { width: 100% !important; }
+body.login .form-row { width: 100% !important; box-sizing: border-box; }
+body.login .form-row input { max-width: 100%; }
+
+/* Bouton « Assistant IA » dans l'en-tête */
+.btn-assistant-pill { display: inline-flex; align-items: center; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.35);
+    color: #fff !important; padding: 7px 16px; border-radius: 999px; font-weight: 700; font-size: .78rem; margin-left: 8px; text-decoration: none !important;
+    transition: background .15s, transform .15s; }
+.btn-assistant-pill:hover { background: rgba(255,255,255,.28); transform: translateY(-1px); }
+body.login .btn-assistant-pill { display: none !important; }
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * V0.8 — ADAPTATION À TOUS LES ÉCRANS ET AU ZOOM (téléphone, tablette, PC)
+ * Principe : unités relatives, aucune largeur fixe, tableaux défilables.
+ * ═══════════════════════════════════════════════════════════════════════ */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { overflow-x: hidden; }
+img, video, canvas, svg { max-width: 100%; }
+.main > .content, #content, #content-main { min-width: 0; }
+#content { box-sizing: border-box; }
+a, p, li, h1, h2, h3, dd, dt, label { overflow-wrap: anywhere; }
+
+/* Tableaux de résultats : défilement horizontal dans leur cadre, jamais sur la page */
+#changelist .results, #changelist-form .results, .inline-group .tabular, .module.aligned,
+#content-main .module { max-width: 100%; }
+#changelist .results { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+#result_list { min-width: 520px; }
+
+/* Barre de recherche et actions */
+#changelist-search, #changelist-search > div { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; max-width: 100%; }
+#changelist-search input[type="text"], #searchbar { flex: 1 1 180px; width: 100% !important; min-width: 0; max-width: 100%; box-sizing: border-box; }
+#changelist .actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+/* Tablette et en dessous : le menu latéral est masqué (le tableau de bord sert de menu) */
+@media (max-width: 1023px) {
+    #nav-sidebar, .toggle-nav-sidebar { display: none !important; }
+    .main > .content, .main.shifted > #nav-sidebar + .content { max-width: 100% !important; flex: 1 1 100%; }
+    #content { padding: 16px 16px 24px !important; }
+    /* le panneau de filtres passe sous la liste */
+    #changelist, #changelist.filtered { flex-direction: column; flex-wrap: nowrap; }
+    #changelist > form, #changelist > .changelist-form-container { width: 100%; min-width: 0; }
+    #changelist-filter { position: static !important; width: 100% !important; max-width: 100%; margin: 16px 0 0 !important; order: 2; box-sizing: border-box; }
+    .object-tools { margin-bottom: 8px; }
+    .object-tools a, .object-tools .addlink { white-space: normal; }
+    #header { flex-wrap: wrap; gap: 8px; }
+    #user-tools { flex-wrap: wrap; gap: 8px; }
+}
+@media (max-width: 767px) {
+    #content h1 { font-size: 1.35rem; overflow-wrap: anywhere; }
+    .form-row .flex-container, fieldset .fieldBox { flex-wrap: wrap; }
+    .aligned label { width: auto !important; float: none !important; display: block; padding-bottom: 4px; }
+    .aligned .form-row > div, .aligned .form-row div.help { margin-left: 0 !important; }
+    input, select, textarea, .vTextField, .vLargeTextField, .vURLField { max-width: 100%; box-sizing: border-box; }
+    .submit-row { flex-wrap: wrap; gap: 8px; }
+    .submit-row input, .submit-row a.deletelink, .submit-row .button { flex: 1 1 140px; }
+    .dashboard #content-main { grid-template-columns: 1fr !important; }
+    table { max-width: 100%; }
+    .module table { display: block; overflow-x: auto; }
+    .module caption { display: block; }
+}
+@media (max-width: 480px) {
+    #header { padding: 8px 12px !important; }
+    #user-tools a, #user-tools button { padding: 8px 12px; }
+    .hda-logo-pastille { max-width: 60vw; }
+    .hda-logo-pastille img { max-width: 100%; height: auto; max-height: 30px; }
+}
+/* Les cibles tactiles restent confortables */
+@media (pointer: coarse) {
+    #user-tools a, #user-tools button, .object-tools a, .button, input[type="submit"], .submit-row a { min-height: 40px; }
+}
+/* Respect du zoom et des préférences : pas d'animation si l'utilisateur la désactive */
+@media (prefers-reduced-motion: reduce) { * { animation-duration: .01ms !important; transition-duration: .01ms !important; } }

@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}Édition du Devis {{ devis.numero }} — H.D.A GLOBAL{% endblock %}
+
+{% block extra_css %}{% include "partials/bootstrap.html" %}{% endblock %}
+
+{% block content %}
+<div class="hda-bs">
+<div class="bg-light py-4 border-bottom">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb small mb-1">
+                        <li class="breadcrumb-item"><a href="{% url 'admin:index' %}">Admin</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'admin:devis_devis_changelist' %}">Devis</a></li>
+                        <li class="breadcrumb-item active">{{ devis.numero }}</li>
+                    </ol>
+                </nav>
+                <h2 class="fw-bold mb-0 text-primary">Devis {{ devis.numero }}</h2>
+                <small class="text-muted">Client : <strong>{{ devis.demande.client.nom_complet }}</strong> — Chantier : {{ devis.demande.ville_chantier }}</small>
+            </div>
+            <div class="d-flex gap-2">
+                <span class="badge bg-{{ devis.get_badge_couleur }} fs-6 px-3 py-2 align-self-center">
+                    Statut : {{ devis.get_statut_display }}
+                </span>
+                <a href="{% url 'admin:devis_devis_change' devis.pk %}" class="btn btn-outline-secondary btn-sm align-self-center">
+                    <i class="bi bi-gear"></i> Vue Django Admin
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-4">
+    {% if notes_auto.genere_auto and devis.statut == 'brouillon' %}
+    <!-- Bandeau de relecture : brouillon généré automatiquement -->
+    <div class="alert alert-warning border-0 rounded-3 shadow-sm d-flex align-items-start gap-3 mb-4" role="alert">
+        <i class="bi bi-exclamation-triangle-fill fs-4 text-warning"></i>
+        <div>
+            <strong>Brouillon généré automatiquement — à relire avant envoi.</strong>
+            {% if notes_auto.confiance %}Confiance : <strong>{{ notes_auto.confiance }}</strong>.{% endif %}
+            {% if notes_auto.alertes %}
+            <ul class="small mt-1 mb-0 ps-3">
+                {% for alerte in notes_auto.alertes %}<li>{{ alerte }}</li>{% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    <div class="row g-4">
+        <!-- Colonne Principale : Lignes du Devis -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold text-dark mb-0">Lignes de Prestations & Travaux</h5>
+                    <span class="badge bg-light text-muted border">{{ lignes.count }} prestation(s)</span>
+                </div>
+
+                <!-- Tableau des lignes -->
+                <div class="table-responsive mb-4">
+                    <table class="table table-bordered align-middle">
+                        <thead class="table-light small">
+                            <tr>
+                                <th style="width: 45%;">Désignation des travaux</th>
+                                <th style="width: 12%;" class="text-center">Qté</th>
+                                <th style="width: 12%;" class="text-center">Unité</th>
+                                <th style="width: 15%;" class="text-end">P.U. HT (MAD)</th>
+                                <th style="width: 16%;" class="text-end">Total HT</th>
+                                <th style="width: 5%;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ligne in lignes %}
+                            <tr>
+                                <td><span class="fw-semibold">{{ ligne.designation }}</span></td>
+                                <td class="text-center">{{ ligne.quantite }}</td>
+                                <td class="text-center"><span class="badge bg-light text-dark border">{{ ligne.unite }}</span></td>
+                                <td class="text-end">{{ ligne.prix_unitaire_ht }}</td>
+                                <td class="text-end fw-bold text-primary">{{ ligne.total_ligne_ht }} MAD</td>
+                                <td class="text-center">
+                                    <form method="post" class="d-inline" onsubmit="return confirm('Supprimer cette ligne ?');">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="supprimer_ligne">
+                                        <input type="hidden" name="ligne_id" value="{{ ligne.pk }}">
+                                        <button type="submit" class="btn btn-link text-danger p-0 border-0" title="Supprimer">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-muted">
+                                    Aucune ligne de chiffrage pour le moment. Ajoutez votre première prestation ci-dessous.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot class="table-group-divider">
+                            <tr>
+                                <td colspan="4" class="text-end fw-semibold">Sous-total HT :</td>
+                                <td class="text-end fw-bold">{{ devis.sous_total_ht }} MAD</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="text-end fw-semibold">TVA ({{ devis.taux_tva }}%) :</td>
+                                <td class="text-end fw-bold">{{ devis.montant_tva }} MAD</td>
+                                <td></td>
+                            </tr>
+                            <tr class="table-warning">
+                                <td colspan="4" class="text-end fw-bold fs-5">TOTAL TTC :</td>
+                                <td class="text-end fw-bold fs-5 text-primary">{{ devis.total_ttc }} MAD</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- Formulaire Ajout Rapide de Ligne -->
+                <div class="card bg-light border-0 p-3 rounded-3">
+                    <h6 class="fw-bold text-primary mb-3"><i class="bi bi-plus-circle me-1"></i> Ajouter une prestation chiffrée</h6>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="ajouter_ligne">
+                        <div class="row g-2">
+                            <div class="col-md-5">
+                                <label class="form-label small fw-semibold">Désignation des travaux *</label>
+                                <input type="text" name="designation" class="form-control form-control-sm" required placeholder="Ex : Pose carrelage grès cérame 60x60">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label small fw-semibold">Quantité *</label>
+                                <input type="number" step="0.01" name="quantite" value="1" class="form-control form-control-sm text-center" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label small fw-semibold">Unité</label>
+                                <select name="unite" class="form-select form-select-sm">
+                                    <option value="m²">m²</option>
+                                    <option value="ml">ml (mètre linéaire)</option>
+                                    <option value="forfait">forfait</option>
+                                    <option value="unité">unité</option>
+                                    <option value="heure">heure</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small fw-semibold">P.U. HT (MAD) *</label>
+                                <div class="input-group input-group-sm">
+                                    <input type="number" step="0.01" name="prix_unitaire_ht" value="0.00" class="form-control form-control-sm text-end" required>
+                                    <button type="submit" class="btn btn-primary fw-bold">
+                                        <i class="bi bi-plus"></i> Ajouter
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Notes & Conditions -->
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <h5 class="fw-bold text-dark mb-3">Conditions & Mentions Spécifiques</h5>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="sauvegarder">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Conditions de règlement :</label>
+                        <input type="text" name="conditions_reglement" value="{{ devis.conditions_reglement }}" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Notes internes ou pour le client :</label>
+                        <textarea name="notes" rows="2" class="form-control">{{ devis.notes }}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary btn-sm fw-semibold">
+                        <i class="bi bi-save me-1"></i> Enregistrer les notes
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Colonne Droite : Actions PDF & Envoi -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                <h5 class="fw-bold text-primary mb-3">Actions sur le Devis</h5>
+
+                <!-- 1. Bouton Générer PDF -->
+                <form method="post" class="mb-2">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="generer_pdf">
+                    <button type="submit" class="btn btn-outline-dark w-100 fw-bold py-2 mb-2">
+                        <i class="bi bi-file-earmark-pdf me-1"></i> Générer / Actualiser le PDF
+                    </button>
+                </form>
+
+                <!-- 2. Télécharger le PDF si dispo -->
+                {% if devis.fichier_pdf %}
+                <a href="{{ devis.fichier_pdf.url }}" target="_blank" class="btn btn-outline-danger w-100 fw-bold py-2 mb-3">
+                    <i class="bi bi-download me-1"></i> Visualiser le PDF officiel
+                </a>
+                {% endif %}
+
+                <hr>
+
+                <!-- 3. Envoyer au client -->
+                <form method="post" onsubmit="return confirm('Confirmez-vous l\'envoi du devis par email au client ? Le statut passera à Envoyé.');">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="envoyer_client">
+                    <button type="submit" class="btn btn-warning w-100 fw-bold py-3 shadow-sm" {% if not lignes.exists %}disabled{% endif %}>
+                        <i class="bi bi-send-fill me-1"></i> Envoyer au client par email
+                    </button>
+                    <small class="text-muted d-block mt-2 text-center">
+                        Génère le PDF et envoie l'email au client avec le lien de suivi sécurisé.
+                    </small>
+                </form>
+            </div>
+
+            <!-- Récap Client & Chantier -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-light">
+                <h6 class="fw-bold text-dark mb-3">Coordonnées du Client</h6>
+                <p class="small mb-1"><strong>Nom :</strong> {{ devis.demande.client.nom_complet }}</p>
+                <p class="small mb-1"><strong>Email :</strong> {{ devis.demande.client.email }}</p>
+                <p class="small mb-1"><strong>Téléphone :</strong> {{ devis.demande.client.telephone }}</p>
+                <p class="small mb-1"><strong>Ville :</strong> {{ devis.demande.ville_chantier }}</p>
+                <p class="small mb-3"><strong>Adresse :</strong> {{ devis.demande.adresse_chantier }}</p>
+                <hr>
+                <a href="{% url 'suivi:detail' devis.demande.token_suivi %}" target="_blank" class="btn btn-outline-primary btn-sm w-100">
+                    <i class="bi bi-box-arrow-up-right me-1"></i> Voir comme le client
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+

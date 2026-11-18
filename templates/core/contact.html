@@ -1,0 +1,404 @@
+{% extends "base.html" %}
+
+{% block title %}Contactez H.D.A GLOBAL — Téléphone, WhatsApp, Adresses Casablanca & Mohammedia{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+<style>
+  #hda-map-contact { background: #e8edf4; }
+  #hda-map-contact .leaflet-tile { border: none !important; }
+  #hda-map-contact .leaflet-control-attribution { display: none !important; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="flex flex-col w-full -mt-28">
+
+  <!-- ── HERO CONTACT ── -->
+  <section class="relative bg-[#0b1c38] text-white overflow-hidden pt-40 pb-16">
+    <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(135deg, rgba(0,16,45,0.95) 0%, rgba(200,69,0,0.18) 100%);"></div>
+    <!-- Decorative circles -->
+    <div class="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-secondary/10 blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-white/3 blur-2xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 text-xs text-slate-400 mb-6">
+        <a href="{% url 'core:home' %}" class="hover:text-white transition-colors">Accueil</a>
+        <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+        <span class="text-white font-semibold">Contact</span>
+      </nav>
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center">
+          <span class="material-symbols-outlined text-secondary text-[28px]">contact_phone</span>
+        </div>
+        <div>
+          <h1 class="font-display font-extrabold text-3xl lg:text-4xl tracking-tight text-white leading-tight">
+            Contactez-nous
+          </h1>
+          <p class="text-slate-300 text-sm mt-0.5">Nos équipes répondent sous 24h ouvrées — intervention possible sous 48h</p>
+        </div>
+      </div>
+      <!-- Quick contact chips -->
+      <div class="flex flex-wrap gap-3 mt-6">
+        <a href="tel:+212661103988" class="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-full text-sm font-semibold text-white border border-white/20 transition-all backdrop-blur-sm">
+          <span class="material-symbols-outlined text-[16px] text-secondary">phone</span>
+          +212 661 103 988
+        </a>
+        <a href="https://wa.me/212661103988" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-[#25D366]/20 hover:bg-[#25D366]/30 rounded-full text-sm font-semibold text-white border border-[#25D366]/30 transition-all">
+          <span class="material-symbols-outlined text-[16px]" style="color:#25D366">forum</span>
+          WhatsApp direct
+        </a>
+        <a href="mailto:contact@hda-global.ma" class="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-full text-sm font-semibold text-white border border-white/20 transition-all backdrop-blur-sm">
+          <span class="material-symbols-outlined text-[16px] text-slate-300">mail</span>
+          contact@hda-global.ma
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MAIN CONTENT ── -->
+  <section class="max-w-7xl mx-auto px-6 lg:px-12 py-14 w-full">
+    <div class="grid lg:grid-cols-12 gap-8">
+
+      <!-- ── LEFT COLUMN : Info + Map ── -->
+      <div class="lg:col-span-5 flex flex-col gap-6">
+
+        <!-- Coordonnées card -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 lg:p-8">
+          <h2 class="font-display font-bold text-lg text-primary mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary text-[22px]">location_on</span>
+            Nos Coordonnées
+          </h2>
+
+          <!-- Siège Social -->
+          <div class="flex gap-4 mb-5 pb-5 border-b border-slate-100">
+            <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-white text-[18px]">home_work</span>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-0.5">Siège Social</p>
+              <p class="text-sm font-semibold text-primary leading-snug">
+                {% if parametres.adresse_siege %}{{ parametres.adresse_siege }}{% else %}Beni Yakhlef, Mohammedia 28810, Maroc{% endif %}
+              </p>
+              <a href="https://maps.google.com/?q=33.7063,-7.3833" target="_blank" class="text-xs text-secondary hover:underline font-medium mt-1 inline-flex items-center gap-1">
+                <span class="material-symbols-outlined text-[13px]">open_in_new</span>
+                Ouvrir dans Google Maps
+              </a>
+            </div>
+          </div>
+
+          <!-- Bureau Casablanca -->
+          <div class="flex gap-4 mb-5 pb-5 border-b border-slate-100">
+            <div class="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-white text-[18px]">business</span>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-0.5">Bureau Casablanca</p>
+              <p class="text-sm font-semibold text-primary leading-snug">
+                {% if parametres.adresse_casablanca %}{{ parametres.adresse_casablanca }}{% else %}Bd Mohamed V, Casablanca, Maroc{% endif %}
+              </p>
+              <a href="https://maps.google.com/?q=33.5731,-7.5898" target="_blank" class="text-xs text-secondary hover:underline font-medium mt-1 inline-flex items-center gap-1">
+                <span class="material-symbols-outlined text-[13px]">open_in_new</span>
+                Ouvrir dans Google Maps
+              </a>
+            </div>
+          </div>
+
+          <!-- Téléphone -->
+          <div class="flex gap-4 mb-5 pb-5 border-b border-slate-100">
+            <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-primary text-[18px]">phone_in_talk</span>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-0.5">Hotline Devis & Urgence</p>
+              <a href="tel:{{ parametres.telephone|default:'+212661103988' }}" class="text-base font-extrabold text-primary hover:text-secondary transition-colors font-display">
+                {{ parametres.telephone|default:"+212 661 103 988" }}
+              </a>
+              <p class="text-[11px] text-slate-400 mt-0.5">Lun–Sam · 08h–18h · Permanence technique 24/7</p>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="flex gap-4 mb-5 pb-5 border-b border-slate-100">
+            <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-primary text-[18px]">mail</span>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-0.5">Email Entreprise</p>
+              <a href="mailto:{{ parametres.email_contact|default:'contact@hda-global.ma' }}" class="text-sm font-semibold text-primary hover:text-secondary transition-colors">
+                {{ parametres.email_contact|default:"contact@hda-global.ma" }}
+              </a>
+            </div>
+          </div>
+
+          <!-- ICE / IF -->
+          <div class="flex gap-4">
+            <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <span class="material-symbols-outlined text-primary text-[18px]">badge</span>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-0.5">Identifiants Légaux</p>
+              {% if parametres.ice %}<p class="text-xs text-slate-600">ICE : {{ parametres.ice }}</p>{% endif %}
+              {% if parametres.identifiant_fiscal %}<p class="text-xs text-slate-600">IF : {{ parametres.identifiant_fiscal }}</p>{% endif %}
+              {% if parametres.rc %}<p class="text-xs text-slate-600">RC : {{ parametres.rc }}</p>{% endif %}
+            </div>
+          </div>
+
+          <!-- WhatsApp CTA -->
+          <a href="https://wa.me/212661103988?text=Bonjour%20H.D.A%20GLOBAL%2C%20je%20souhaite%20un%20devis%20pour%20mes%20travaux." target="_blank"
+            class="mt-6 flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white text-sm transition-all"
+            style="background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Discuter sur WhatsApp
+          </a>
+        </div>
+
+        <!-- ── CARTE LEAFLET ── -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+          <div class="px-5 py-4 border-b border-slate-100 flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary text-[20px]">map</span>
+            <h2 class="font-display font-bold text-base text-primary">Notre Zone d'Intervention</h2>
+          </div>
+          <div id="hda-map-contact" class="w-full" style="height:320px; z-index:0;"></div>
+          <div class="px-5 py-3 bg-slate-50 flex items-center gap-4 text-[11px] text-slate-500 border-t border-slate-100">
+            <span class="flex items-center gap-1.5">
+              <span class="inline-block w-3 h-3 rounded-full bg-secondary"></span>
+              Mohammedia — Siège
+            </span>
+            <span class="flex items-center gap-1.5">
+              <span class="inline-block w-3 h-3 rounded-full bg-blue-500"></span>
+              Casablanca — Bureau
+            </span>
+            <span class="flex items-center gap-1.5">
+              <span class="inline-block w-3 h-3 rounded-full border border-secondary bg-orange-50"></span>
+              Zone principale 40 km
+            </span>
+          </div>
+        </div>
+
+        <!-- Horaires -->
+        <div class="bg-primary rounded-2xl p-6 text-white">
+          <h3 class="font-display font-bold text-base mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary text-[20px]">schedule</span>
+            Horaires & Permanence
+          </h3>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between py-2 border-b border-white/10">
+              <span class="text-slate-300">Lundi – Vendredi</span>
+              <span class="font-semibold">08h00 – 18h00</span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-white/10">
+              <span class="text-slate-300">Samedi</span>
+              <span class="font-semibold">09h00 – 13h00</span>
+            </div>
+            <div class="flex justify-between py-2">
+              <span class="text-slate-300">Urgences chantier</span>
+              <span class="font-semibold text-secondary">24h / 7j</span>
+            </div>
+          </div>
+          <a href="{% url 'demandes:create' %}" class="mt-5 flex items-center justify-center gap-2 w-full py-3 bg-secondary hover:bg-secondary/90 rounded-xl font-bold text-white text-sm transition-all">
+            <span class="material-symbols-outlined text-[18px]">description</span>
+            Demander un devis gratuit
+          </a>
+        </div>
+
+      </div><!-- /.left -->
+
+      <!-- ── RIGHT COLUMN : Formulaire de contact ── -->
+      <div class="lg:col-span-7">
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 lg:p-10 h-full">
+          <div class="mb-8">
+            <span class="text-xs uppercase tracking-widest text-secondary font-extrabold">Formulaire de contact</span>
+            <h2 class="font-display font-extrabold text-2xl text-primary mt-1 tracking-tight">Envoyez-nous un message</h2>
+            <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+              Pour une estimation détaillée, préférez le
+              <a href="{% url 'demandes:create' %}" class="text-secondary hover:underline font-semibold">formulaire de devis avec photos</a>.
+              Ce formulaire est pour les demandes générales, partenariats et renseignements.
+            </p>
+          </div>
+
+          {% if messages %}
+          <div class="mb-6">
+            {% for message in messages %}
+            <div class="flex items-start gap-3 p-4 rounded-xl mb-3
+              {% if message.tags == 'success' %}bg-green-50 border border-green-200 text-green-800
+              {% elif message.tags == 'error' %}bg-red-50 border border-red-200 text-red-800
+              {% else %}bg-blue-50 border border-blue-200 text-blue-800{% endif %}">
+              <span class="material-symbols-outlined text-[20px] flex-shrink-0">
+                {% if message.tags == 'success' %}check_circle{% else %}info{% endif %}
+              </span>
+              <p class="text-sm font-medium">{{ message }}</p>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <form method="post" action="{% url 'core:contact' %}" class="space-y-5">
+            {% csrf_token %}
+            <!-- Honeypot anti-spam -->
+            <input type="text" name="website" style="display:none;" tabindex="-1" autocomplete="off">
+
+            <div class="grid sm:grid-cols-2 gap-5">
+              <!-- Nom -->
+              <div>
+                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+                  Nom complet <span class="text-secondary">*</span>
+                </label>
+                <div class="relative">
+                  <span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-[18px]">person</span>
+                  <input type="text" name="nom" required placeholder="Ahmed Bennani"
+                    class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-secondary/30 focus:border-secondary transition-all bg-slate-50 text-primary placeholder-slate-400">
+                </div>
+              </div>
+              <!-- Téléphone -->
+              <div>
+                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+                  Téléphone <span class="text-secondary">*</span>
+                </label>
+                <div class="relative">
+                  <span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-[18px]">phone</span>
+                  <input type="tel" name="telephone" required placeholder="+212 6XX XXX XXX"
+                    class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-secondary/30 focus:border-secondary transition-all bg-slate-50 text-primary placeholder-slate-400">
+                </div>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+                Email <span class="text-secondary">*</span>
+              </label>
+              <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-[18px]">mail</span>
+                <input type="email" name="email" required placeholder="votre@email.com"
+                  class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-secondary/30 focus:border-secondary transition-all bg-slate-50 text-primary placeholder-slate-400">
+              </div>
+            </div>
+
+            <!-- Sujet -->
+            <div>
+              <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">Sujet</label>
+              <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-[18px]">topic</span>
+                <input type="text" name="sujet" placeholder="Renseignement, partenariat, recrutement…"
+                  class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-secondary/30 focus:border-secondary transition-all bg-slate-50 text-primary placeholder-slate-400">
+              </div>
+            </div>
+
+            <!-- Message -->
+            <div>
+              <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+                Message <span class="text-secondary">*</span>
+              </label>
+              <textarea name="message" rows="6" required placeholder="Décrivez votre demande, projet ou question…"
+                class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-secondary/30 focus:border-secondary transition-all bg-slate-50 text-primary placeholder-slate-400 resize-none"></textarea>
+            </div>
+
+            <!-- Submit -->
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+              <button type="submit"
+                class="flex-1 flex items-center justify-center gap-2 py-4 rounded-xl font-bold text-white text-sm transition-all hover:shadow-lg hover:scale-[1.01]"
+                style="background: linear-gradient(135deg, #00102d 0%, #1a3a6e 100%);">
+                <span class="material-symbols-outlined text-[20px]">send</span>
+                Envoyer le message
+              </button>
+              <a href="https://wa.me/212661103988?text=Bonjour%20H.D.A%20GLOBAL%2C%20j'ai%20une%20question." target="_blank"
+                class="flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold text-white text-sm transition-all"
+                style="background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                WhatsApp
+              </a>
+            </div>
+          </form>
+
+          <!-- Info devis rapide -->
+          <div class="mt-8 p-5 bg-amber-50 rounded-xl border border-amber-200/60">
+            <div class="flex gap-3">
+              <span class="material-symbols-outlined text-amber-600 text-[22px] flex-shrink-0">info</span>
+              <div>
+                <p class="text-sm font-bold text-amber-800 mb-1">Vous avez un projet de travaux ?</p>
+                <p class="text-xs text-amber-700 leading-relaxed">
+                  Pour un devis précis et rapide, utilisez notre
+                  <a href="{% url 'demandes:create' %}" class="underline font-semibold">formulaire de demande de devis</a>
+                  — joignez vos plans, photos et métrés pour une réponse sous 24h.
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /.right -->
+
+    </div><!-- /.grid -->
+  </section>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+  window.addEventListener('load', function () {
+    var mapEl = document.getElementById('hda-map-contact');
+    if (!mapEl || typeof L === 'undefined') return;
+
+    var map = L.map('hda-map-contact', {
+      zoomControl: true,
+      scrollWheelZoom: false,
+      attributionControl: true
+    }).setView([33.648, -7.420], 10);
+
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; <a href="https://www.esri.com/">Esri</a> &mdash; Sources: Esri, DeLorme, NAVTEQ, OpenStreetMap',
+      maxZoom: 18
+    }).addTo(map);
+
+    /* Icône orange — Siège Mohammedia */
+    var orangeIcon = L.icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+      iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+    });
+    /* Icône bleue — Bureau Casablanca */
+    var blueIcon = L.icon({
+      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+      iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+    });
+
+    /* Marqueurs */
+    L.marker([33.7063, -7.3833], { icon: orangeIcon })
+      .addTo(map)
+      .bindPopup(
+        '<div style="font-family:\'Plus Jakarta Sans\',sans-serif;min-width:160px">' +
+        '<b style="color:#00102d;font-size:13px">H.D.A GLOBAL</b><br>' +
+        '<span style="color:#c84500;font-weight:600;font-size:11px">Si&egrave;ge Social</span><br>' +
+        '<span style="font-size:11px;color:#555">Beni Yakhlef, Mohammedia 28810</span><br>' +
+        '<a href="https://maps.google.com/?q=33.7063,-7.3833" target="_blank" style="font-size:11px;color:#c84500">&#128205; Google Maps</a>' +
+        '</div>'
+      )
+      .openPopup();
+
+    L.marker([33.5731, -7.5898], { icon: blueIcon })
+      .addTo(map)
+      .bindPopup(
+        '<div style="font-family:\'Plus Jakarta Sans\',sans-serif;min-width:160px">' +
+        '<b style="color:#00102d;font-size:13px">H.D.A GLOBAL</b><br>' +
+        '<span style="color:#3b82f6;font-weight:600;font-size:11px">Bureau Casablanca</span><br>' +
+        '<span style="font-size:11px;color:#555">Bd Mohamed V, Casablanca</span><br>' +
+        '<a href="https://maps.google.com/?q=33.5731,-7.5898" target="_blank" style="font-size:11px;color:#3b82f6">&#128205; Google Maps</a>' +
+        '</div>'
+      );
+
+    /* Zone d'intervention 40 km */
+    L.circle([33.648, -7.420], {
+      color: '#c84500', fillColor: '#ea580c', fillOpacity: 0.06,
+      radius: 40000, weight: 1.5, dashArray: '6 4'
+    }).addTo(map);
+
+    /* Force le recalcul de la taille après rendu */
+    setTimeout(function () { map.invalidateSize(); }, 300);
+  });
+</script>
+{% endblock %}

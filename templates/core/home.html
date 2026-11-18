@@ -1,0 +1,494 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}H.D.A GLOBAL — BTP & Construction TCE Casablanca & Mohammedia{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+<style>
+  #hda-map-home { height: 208px; min-height: 208px; background: #e8edf4; }
+  #hda-map-home .leaflet-tile { border: none !important; }
+  #hda-map-home .leaflet-control-attribution { display: none !important; }
+  .hero-gradient {
+    background: linear-gradient(90deg, rgba(0,16,45,0.88) 0%, rgba(0,16,45,0.72) 45%, rgba(0,16,45,0.40) 100%);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="flex flex-col w-full -mt-28">
+
+  <!-- HERO SECTION CONFORME STITCH -->
+  <section class="relative bg-[#0b1c38] text-white overflow-hidden pt-36 pb-20 lg:pb-28">
+    <!-- Chantier Background Overlay with Local High-Res Hero Image -->
+    {% static 'img/hero_btp.jpg' as hero_url %}
+    <div class="absolute inset-0 bg-cover bg-center pointer-events-none" style="background-image:url('{{ hero_url }}')"></div>
+    <div class="absolute inset-0 pointer-events-none hero-gradient"></div>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <!-- Left: Main Value Narrative & Hero Badges -->
+        <div class="lg:col-span-7 flex flex-col gap-4">
+          <!-- Trust Badge Pill -->
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-secondary/50 bg-secondary/15 text-secondary-fixed w-fit backdrop-blur-sm">
+            <span class="material-symbols-outlined text-secondary text-[16px]">shield</span>
+            <span class="text-xs uppercase font-extrabold tracking-wider text-orange-400">PARTENAIRE DE CONFIANCE BTP</span>
+          </div>
+
+          <!-- Bold Typography -->
+          <div class="flex flex-col gap-2">
+            <h1 class="font-display text-[38px] sm:text-[46px] lg:text-[52px] font-extrabold text-white tracking-tight leading-[1.12]">
+              Votre partenaire de confiance pour tous vos <span class="text-secondary">projets BTP</span>
+            </h1>
+            <p class="text-sm sm:text-base text-slate-200 leading-relaxed max-w-2xl mt-1">
+              H.D.A GLOBAL vous accompagne de A à Z : Construction neuve, Rénovation complète, Gestion de projets TCE, Aménagement intérieur &amp; extérieur, Climatisation et Plomberie générale à Mohammedia, Casablanca et dans tout le Maroc.
+            </p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-wrap items-center gap-3 pt-3">
+            <a class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-white bg-secondary hover:bg-secondary-hover shadow-lg shadow-orange-950/30 transition-all transform hover:-translate-y-0.5 active:scale-95" href="{% url 'demandes:create' %}">
+              <span class="material-symbols-outlined text-[20px]">assignment</span>
+              <span>Demander un devis gratuit</span>
+            </a>
+            <a class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-600/50 backdrop-blur-sm transition-all" href="#services-tce">
+              <span class="material-symbols-outlined text-[20px]">grid_view</span>
+              <span>Nos 6 Services TCE</span>
+            </a>
+          </div>
+
+          <!-- Technical Metric Pillars -->
+          <div class="pt-6 grid grid-cols-3 gap-6 max-w-lg border-t border-white/10 mt-2">
+            <div class="flex flex-col">
+              <span class="font-display text-2xl lg:text-3xl font-extrabold text-secondary">TCE</span>
+              <span class="text-xs text-slate-300">Tous Corps d'État pilotés</span>
+            </div>
+            <div class="flex flex-col">
+              <span class="font-display text-2xl lg:text-3xl font-extrabold text-secondary">24–48h</span>
+              <span class="text-xs text-slate-300">Réactivité devis &amp; étude</span>
+            </div>
+            <div class="flex flex-col">
+              <span class="font-display text-2xl lg:text-3xl font-extrabold text-secondary">100%</span>
+              <span class="text-xs text-slate-300">Suivi en ligne par token</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Interactive Quick Chiffrage Card -->
+        <div class="lg:col-span-5">
+          <div class="bg-white text-slate-900 rounded-2xl p-7 shadow-2xl relative border border-slate-100">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 rounded-xl bg-blue-50 text-primary flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[26px]">headset_mic</span>
+              </div>
+              <div class="flex flex-col">
+                <h3 class="text-lg font-bold text-primary">Besoin d'un chiffrage rapide ?</h3>
+                <p class="text-xs text-slate-500">Un conseiller vous répond directement</p>
+              </div>
+            </div>
+
+            <p class="text-xs text-slate-600 mb-4 leading-relaxed">
+              Que ce soit pour une villa, un appartement, des bureaux ou un local commercial, obtenez une estimation détaillée et transparente.
+            </p>
+
+            <ul class="flex flex-col gap-2.5 mb-6 text-xs text-slate-700 font-medium">
+              <li class="flex items-center gap-2.5">
+                <span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>
+                <span>Déplacement sur chantier pour diagnostic</span>
+              </li>
+              <li class="flex items-center gap-2.5">
+                <span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>
+                <span>Devis officiel détaillé avec TVA 20%</span>
+              </li>
+              <li class="flex items-center gap-2.5">
+                <span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>
+                <span>Suivi de l'avancement en temps réel sans mot de passe</span>
+              </li>
+            </ul>
+
+            <a class="w-full inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl font-bold text-white bg-primary hover:bg-primary-container shadow-md transition-all text-sm" href="{% url 'demandes:create' %}">
+              <span>Remplir la demande en 2 min</span>
+              <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 CORE TCE SPECIALTIES ACCORDING TO STITCH -->
+  <section class="max-w-7xl mx-auto px-6 lg:px-12 py-16 w-full" id="services-tce">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <div class="inline-flex items-center px-4 py-1 rounded-full bg-orange-100 text-secondary text-xs font-bold uppercase tracking-wider mb-3">
+        PRESTATIONS SPÉCIALISÉES
+      </div>
+      <h2 class="font-display text-3xl md:text-4xl font-extrabold text-primary tracking-tight">
+        Nos 6 Métiers &amp; Expertises TCE
+      </h2>
+      <p class="text-sm text-slate-600 mt-2 max-w-2xl mx-auto">
+        Une équipe polyvalente et des artisans certifiés pour couvrir chaque étape de vos travaux, du gros œuvre aux finitions décoratives.
+      </p>
+    </div>
+
+    <!-- The 3x2 Dynamic Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for service in services %}
+      <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+        <div>
+          <div class="relative h-48 w-full overflow-hidden bg-slate-100">
+            {% if service.image_principale %}
+            <img alt="{{ service.nom }}" class="w-full h-full object-cover rounded-t-2xl group-hover:scale-105 transition-transform duration-500" src="{{ service.image_principale.url }}">
+            {% else %}
+            <div class="w-full h-full flex items-center justify-center bg-slate-200 text-slate-400">
+              <span class="material-symbols-outlined text-[48px]">construction</span>
+            </div>
+            {% endif %}
+            <div class="absolute top-3 right-3 bg-primary text-white px-2.5 py-1 rounded-lg text-xs font-bold shadow-sm">
+              {{ service.prix_affiche }}
+            </div>
+          </div>
+          <div class="p-5 pb-2">
+            <h3 class="text-lg font-bold text-primary mb-1.5 group-hover:text-secondary transition-colors">
+              {{ service.nom }}
+            </h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              {{ service.description_courte }}
+            </p>
+          </div>
+        </div>
+
+        <div class="p-5 pt-3">
+          <div class="grid grid-cols-2 gap-3">
+            <a class="inline-flex items-center justify-center py-2 px-3 rounded-xl text-xs font-semibold text-primary bg-white border border-slate-300 hover:bg-slate-50 transition-colors" href="{% url 'services:detail' service.slug %}">
+              Détails &amp; Étapes
+            </a>
+            <a class="inline-flex items-center justify-center gap-1 py-2 px-3 rounded-xl text-xs font-bold text-white bg-secondary hover:bg-secondary-hover shadow-xs transition-colors" href="{% url 'demandes:create' %}?service={{ service.slug }}">
+              <span>Devis</span>
+              <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Centered Bottom Trigger -->
+    <div class="mt-12 flex justify-center">
+      <a class="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 bg-white border border-slate-300 hover:border-slate-400 hover:bg-slate-50 shadow-sm transition-all" href="{% url 'services:list' %}">
+        <span>Voir toutes les prestations en détail</span>
+        <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION PRÉSENTATION DU SERVICE (SPOTLIGHT FEATURED) -->
+  {% if featured_service %}
+  <section class="max-w-7xl mx-auto px-6 lg:px-12 py-10 w-full" id="presentation-service">
+    <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <div class="text-xs text-slate-500 mb-1 flex items-center gap-1">
+          <a class="hover:underline text-primary" href="{% url 'core:home' %}">Accueil</a>
+          <span>/</span>
+          <a class="hover:underline text-primary" href="{% url 'services:list' %}">Services</a>
+          <span>/</span>
+          <span class="text-slate-600 font-semibold">{{ featured_service.nom }}</span>
+        </div>
+        <h2 class="text-2xl lg:text-3xl font-extrabold text-primary font-display">{{ featured_service.nom }}</h2>
+        <p class="text-xs text-slate-600 mt-1">{{ featured_service.description_courte }}</p>
+      </div>
+
+      <a class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-secondary hover:bg-secondary-hover shadow-sm transition-all self-start sm:self-auto" href="{% url 'demandes:create' %}?service={{ featured_service.slug }}">
+        <span class="material-symbols-outlined text-[18px]">assignment</span>
+        <span>Demander ce service</span>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <!-- Grande photo de chantier & Présentation du Service -->
+      <div class="lg:col-span-8 flex flex-col gap-6">
+        <div class="w-full h-80 rounded-2xl overflow-hidden shadow-sm border border-slate-200">
+          {% if featured_service.image_principale %}
+          <img alt="{{ featured_service.nom }}" class="w-full h-full object-cover" src="{{ featured_service.image_principale.url }}">
+          {% else %}
+          <div class="w-full h-full bg-slate-200 flex items-center justify-center">
+            <span class="material-symbols-outlined text-[64px] text-slate-400">apartment</span>
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm">
+          <h3 class="text-xl font-bold text-primary mb-4 font-display">Présentation du Service</h3>
+          <p class="text-sm text-slate-700 leading-relaxed mb-4">
+            H.D.A GLOBAL prend en charge tous vos projets de construction neuve et de rénovation. Nos équipes qualifiées maîtrisent les techniques de gros œuvre marocain (fondations, dalles, voiles), la maçonnerie traditionnelle et moderne, la réhabilitation de bâtiments anciens et les travaux de surélévation.
+          </p>
+          <p class="text-sm text-slate-700 leading-relaxed">
+            Nous intervenons sur des projets résidentiels (villas, appartements, riads) et commerciaux (bureaux, locaux industriels, commerces).
+          </p>
+        </div>
+      </div>
+
+      <!-- Widget Tarification Indicative & Autres prestations -->
+      <div class="lg:col-span-4 flex flex-col gap-6">
+        <div class="bg-white rounded-2xl p-6 border-2 border-amber-400 shadow-sm flex flex-col">
+          <span class="text-sm font-bold text-slate-800">Tarification Indicative</span>
+          <div class="my-3">
+            <div class="text-2xl sm:text-3xl font-extrabold text-primary font-display">
+              {{ featured_service.prix_affiche }}
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 leading-relaxed mb-6">
+            Le tarif final dépend de la configuration du chantier, des matériaux retenus et des métrés précis constatés lors du diagnostic.
+          </p>
+          <div class="flex flex-col gap-3">
+            <a class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-secondary hover:bg-secondary-hover shadow-sm transition-all" href="{% url 'demandes:create' %}?service={{ featured_service.slug }}">
+              <span class="material-symbols-outlined text-[18px]">description</span>
+              <span>Demander un devis gratuit</span>
+            </a>
+            <a class="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 transition-colors" href="https://wa.me/212661103988" target="_blank">
+              <span class="material-symbols-outlined text-[18px]">chat</span>
+              <span>Poser une question WhatsApp</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm flex flex-col">
+          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">AUTRES PRESTATIONS BTP</h4>
+          <div class="flex flex-col divide-y divide-slate-100 text-xs">
+            {% for other in other_services %}
+            <div class="py-3 first:pt-0 last:pb-0">
+              <a class="font-bold text-primary hover:text-secondary block transition-colors" href="{% url 'services:detail' other.slug %}">
+                {{ other.nom }}
+              </a>
+              <span class="text-slate-500 text-[11px]">{{ other.prix_affiche }}</span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- WHY CHOOSE H.D.A GLOBAL & COVERAGE ZONE -->
+  <section class="bg-slate-50 py-16 w-full border-y border-slate-200/70">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Left: 3 Core Pillars -->
+        <div class="lg:col-span-7 flex flex-col gap-6">
+          <div>
+            <span class="text-xs uppercase tracking-widest text-secondary font-extrabold">Méthodologie &amp; Rigueur</span>
+            <h2 class="font-display text-2xl lg:text-3xl font-extrabold text-primary tracking-tight mt-1">
+              Pourquoi confier votre chantier à H.D.A GLOBAL ?
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-2">
+              Nous éliminons les aléas classiques du BTP grâce à une gestion centralisée, des métrés précis et des garanties contractuelles fermes.
+            </p>
+          </div>
+
+          <div class="space-y-4">
+            <!-- Feature 1 -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 flex items-start gap-4">
+              <div class="w-12 h-12 rounded-xl bg-blue-50 text-primary flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[24px]">hub</span>
+              </div>
+              <div class="flex flex-col">
+                <h3 class="text-base font-bold text-primary font-display">Interlocuteur Unique TCE</h3>
+                <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                  Fini la dispersion entre dix artisans distincts. Un ingénieur travaux dédié coordonne le gros œuvre, les corps d'état techniques et les finitions avec un planning consolidé.
+                </p>
+              </div>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 flex items-start gap-4">
+              <div class="w-12 h-12 rounded-xl bg-orange-50 text-secondary flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[24px]">receipt_long</span>
+              </div>
+              <div class="flex flex-col">
+                <h3 class="text-base font-bold text-primary font-display">Chiffrage Déterministe &amp; Transparent</h3>
+                <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                  Bordereaux de prix unitaires réels, calculs automatiques HT / TVA 20% / TTC, décomposition poste par poste : aucun surcoût caché en cours d'exécution.
+                </p>
+              </div>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 flex items-start gap-4">
+              <div class="w-12 h-12 rounded-xl bg-blue-50 text-primary flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[24px]">key</span>
+              </div>
+              <div class="flex flex-col">
+                <h3 class="text-base font-bold text-primary font-display">Portail Client Sécurisé Sans Mot de Passe</h3>
+                <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                  Consultez vos devis, PV de réception et photos de chantier en direct via un lien d'accès tokenisé sécurisé (UUID4), accessible depuis votre smartphone 24/7.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Geographic Coverage & Direct Contact Card -->
+        <div class="lg:col-span-5 flex flex-col justify-between">
+          <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/80 h-full flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-2 mb-3">
+                <span class="material-symbols-outlined text-secondary text-[26px]">map</span>
+                <h3 class="text-lg font-bold text-primary font-display">Périmètre d'Intervention</h3>
+              </div>
+              <p class="text-xs text-slate-600 mb-4 leading-relaxed">
+                Présence continue de nos équipes mobiles d'ingénieurs et techniciens sur l'axe économique Casablanca – Mohammedia et régions limitrophes :
+              </p>
+
+              <!-- Coverage zones chips -->
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold">Mohammedia (Beni Yakhlef)</span>
+                <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-primary text-xs font-semibold">Casablanca Centre</span>
+                <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs">Bouskoura</span>
+                <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs">Dar Bouazza</span>
+                <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs">Zenata Eco-City</span>
+                <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs">Berrechid &amp; Settat</span>
+              </div>
+
+              <!-- Map Display Component — Leaflet/OpenStreetMap (real interactive map) -->
+              <div id="hda-map-home" class="w-full h-52 rounded-xl overflow-hidden border border-slate-200 shadow-sm" style="z-index:0;"></div>
+            </div>
+
+            <!-- Direct Contact Box -->
+            <div class="mt-6 pt-4 border-t border-slate-100 bg-slate-50 p-4 rounded-xl flex items-center justify-between">
+              <div>
+                <span class="text-[11px] text-slate-500 uppercase tracking-wider block font-semibold">Hotline Devis &amp; Étude</span>
+                <a class="text-base sm:text-lg text-primary hover:text-secondary transition-colors font-extrabold font-display" href="tel:+212661103988">
+                  +212 661 103 988
+                </a>
+              </div>
+              <a class="w-11 h-11 rounded-full bg-secondary text-white flex items-center justify-center hover:bg-secondary-hover shadow-md transition-all" href="https://wa.me/212661103988" target="_blank">
+                <span class="material-symbols-outlined text-[20px]">chat</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP-BY-STEP WORKFLOW ACCORDION / PROCESS -->
+  <section class="max-w-7xl mx-auto px-6 lg:px-12 py-16 w-full">
+    <div class="bg-primary text-white rounded-3xl p-8 lg:p-12 shadow-xl relative overflow-hidden">
+      <!-- Decorative Backdrop Geometry -->
+      <div class="absolute -right-20 -bottom-20 w-80 h-80 rounded-full bg-secondary/15 blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 max-w-3xl">
+        <span class="text-xs uppercase tracking-widest text-orange-400 font-extrabold">Déroulement Transparent</span>
+        <h2 class="font-display text-2xl lg:text-3xl font-extrabold text-white tracking-tight mt-1 mb-3">
+          De la première esquisse à la remise des clés
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300 mb-8 leading-relaxed">
+          Notre processus suit une méthodologie éprouvée pour garantir le respect de l'enveloppe budgétaire et des délais convenus.
+        </p>
+
+        <!-- Process Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="flex flex-col gap-1">
+            <span class="font-display text-3xl font-extrabold text-secondary">01</span>
+            <h4 class="text-sm font-bold text-white font-display">Visite &amp; Métrés</h4>
+            <p class="text-xs text-slate-300 leading-relaxed">Relevé topographique, analyse de sol ou diagnostic des réseaux existants.</p>
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="font-display text-3xl font-extrabold text-secondary">02</span>
+            <h4 class="text-sm font-bold text-white font-display">Chiffrage Certifié</h4>
+            <p class="text-xs text-slate-300 leading-relaxed">Devis détaillé décomposé avec TVA 20% et calendrier d'exécution prévisionnel.</p>
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="font-display text-3xl font-extrabold text-secondary">03</span>
+            <h4 class="text-sm font-bold text-white font-display">Pilotage TCE</h4>
+            <p class="text-xs text-slate-300 leading-relaxed">Supervision journalière par conducteur de travaux et rapports photo en direct.</p>
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="font-display text-3xl font-extrabold text-secondary">04</span>
+            <h4 class="text-sm font-bold text-white font-display">Réception &amp; Garantie</h4>
+            <p class="text-xs text-slate-300 leading-relaxed">Levée des réserves, PV de réception officiel et activation de la garantie décennale.</p>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-white/10 flex flex-wrap items-center gap-4">
+          <a class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-white bg-secondary hover:bg-secondary-hover transition-all shadow-md active:scale-95 text-xs sm:text-sm" href="{% url 'demandes:create' %}">
+            <span>Démarrer mon projet maintenant</span>
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+          </a>
+          <span class="text-slate-300 text-xs">Étude et déplacement gratuits à Casablanca &amp; Mohammedia.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Interactive Smooth Scrolling for In-Page Anchors -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href && href !== '#') {
+          const target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  });
+</script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+  window.addEventListener('load', function () {
+    var mapEl = document.getElementById('hda-map-home');
+    if (!mapEl || typeof L === 'undefined') return;
+
+    var map = L.map('hda-map-home', {
+      zoomControl: true,
+      scrollWheelZoom: false,
+      attributionControl: true
+    }).setView([33.648, -7.420], 10);
+
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; <a href="https://www.esri.com/">Esri</a> &mdash; Sources: Esri, DeLorme, NAVTEQ, OpenStreetMap',
+      maxZoom: 18
+    }).addTo(map);
+
+    /* Marqueur orange — Siège Mohammedia */
+    var orangeIcon = L.icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+      iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+    });
+    /* Marqueur bleu — Bureau Casablanca */
+    var blueIcon = L.icon({
+      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+      iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+    });
+
+    L.marker([33.7063, -7.3833], { icon: orangeIcon })
+      .addTo(map)
+      .bindPopup('<b style="color:#00102d">H.D.A GLOBAL</b><br><span style="font-size:12px;color:#c84500">Siège — Mohammedia / Beni Yakhlef</span>')
+      .openPopup();
+
+    L.marker([33.5731, -7.5898], { icon: blueIcon })
+      .addTo(map)
+      .bindPopup('<b style="color:#00102d">H.D.A GLOBAL</b><br><span style="font-size:12px;color:#3b82f6">Bureau — Casablanca, Bd Mohamed V</span>');
+
+    /* Zone d'intervention */
+    L.circle([33.648, -7.420], {
+      color: '#c84500', fillColor: '#ea580c', fillOpacity: 0.07,
+      radius: 40000, weight: 1.5, dashArray: '6 4'
+    }).addTo(map);
+
+    setTimeout(function () { map.invalidateSize(); }, 300);
+  });
+</script>
+{% endblock %}

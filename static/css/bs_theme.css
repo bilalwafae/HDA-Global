@@ -1,0 +1,125 @@
+/* ==========================================================================
+   H.D.A GLOBAL — thème des pages « Bootstrap » (planning, devis, suivi client)
+   Le site public est en Tailwind (preflight) : on restaure ici ce que le reset retire
+   (titres, listes, liens, séparateurs) et on applique la charte bleu / orange.
+   ========================================================================== */
+:root {
+    --hda-blue: #1E3A8A; --hda-blue-2: #1E5BB8; --hda-blue-soft: #EAF0FB;
+    --hda-orange: #F97316; --hda-orange-dark: #EA580C;
+    --hda-ink: #0F172A; --hda-muted: #64748B; --hda-line: #E2E8F0;
+    --bs-primary: #1E3A8A; --bs-primary-rgb: 30,58,138;
+    --bs-link-color: #1E5BB8; --bs-body-color: #1E293B;
+    --bs-border-color: #E2E8F0; --bs-border-radius: .75rem;
+}
+.hda-bs { color: var(--hda-ink); background: transparent; font-family: inherit; --bs-body-font-family: inherit; }
+
+/* -- Restaure les éléments neutralisés par le reset Tailwind -- */
+.hda-bs h1, .hda-bs h2, .hda-bs h3, .hda-bs h4, .hda-bs h5, .hda-bs h6 { font-weight: 800; letter-spacing: -.01em; line-height: 1.2; }
+.hda-bs h1 { font-size: 2rem; } .hda-bs h2 { font-size: 1.6rem; } .hda-bs h3 { font-size: 1.3rem; }
+.hda-bs h4 { font-size: 1.15rem; } .hda-bs h5 { font-size: 1.05rem; } .hda-bs h6 { font-size: .95rem; }
+.hda-bs ul:not(.list-unstyled):not(.breadcrumb):not(.nav):not(.pagination) { list-style: disc; padding-left: 1.25rem; margin: .4rem 0; }
+.hda-bs ol:not(.breadcrumb) { list-style: decimal; padding-left: 1.25rem; }
+.hda-bs hr { border: 0; border-top: 1px solid var(--hda-line); opacity: 1; margin: 1rem 0; }
+.hda-bs a:not(.btn):not([class*="text-"]):not(.nav-link) { color: var(--hda-blue-2); text-decoration: none; font-weight: 600; }
+.hda-bs a:not(.btn):not([class*="text-"]):hover { color: var(--hda-orange-dark); }
+.hda-bs img { display: inline-block; }
+.hda-bs small, .hda-bs .small { font-size: .82rem; }
+
+/* -- En-tête de page (bandeau) -- */
+.hda-bs > .bg-light.py-4.border-bottom, .hda-bs > .hda-pagehead {
+    background: linear-gradient(110deg, #F8FAFF 0%, #EAF0FB 100%) !important;
+    border-bottom: 1px solid var(--hda-line) !important; padding: 28px 0 !important; position: relative;
+}
+.hda-bs > .bg-light.py-4.border-bottom::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 120px; height: 3px; background: var(--hda-orange); }
+.hda-bs .breadcrumb { margin-bottom: .5rem; font-size: .8rem; --bs-breadcrumb-divider-color: #94A3B8; }
+.hda-bs .breadcrumb-item.active { color: var(--hda-muted); }
+.hda-bs .text-primary { color: var(--hda-blue) !important; }
+.hda-bs .text-muted { color: var(--hda-muted) !important; }
+
+/* -- Cartes -- */
+.hda-bs .card { border: 1px solid var(--hda-line); border-radius: 16px !important; background: #fff;
+    box-shadow: 0 1px 2px rgba(15,23,42,.05), 0 8px 24px rgba(30,58,138,.06) !important; }
+.hda-bs .card.bg-light { background: #F8FAFC !important; box-shadow: none !important; }
+
+/* -- Boutons -- */
+.hda-bs .btn { font-weight: 700; border-radius: 12px; padding: .55rem 1.1rem; transition: transform .15s, box-shadow .15s, background .15s; letter-spacing: .01em; }
+.hda-bs .btn:hover { transform: translateY(-1px); }
+.hda-bs .btn-sm { padding: .38rem .8rem; border-radius: 10px; font-size: .82rem; }
+.hda-bs .btn-primary { --bs-btn-bg: var(--hda-blue); --bs-btn-border-color: var(--hda-blue); --bs-btn-hover-bg: var(--hda-blue-2); --bs-btn-hover-border-color: var(--hda-blue-2);
+    --bs-btn-active-bg: var(--hda-blue-2); box-shadow: 0 6px 14px rgba(30,58,138,.22); }
+.hda-bs .btn-warning { --bs-btn-color: #fff; --bs-btn-bg: var(--hda-orange); --bs-btn-border-color: var(--hda-orange);
+    --bs-btn-hover-color: #fff; --bs-btn-hover-bg: var(--hda-orange-dark); --bs-btn-hover-border-color: var(--hda-orange-dark);
+    --bs-btn-disabled-bg: #FDBA74; --bs-btn-disabled-border-color: #FDBA74; --bs-btn-disabled-color: #fff;
+    box-shadow: 0 8px 18px rgba(249,115,22,.3); }
+.hda-bs .btn-success { --bs-btn-bg: #16A34A; --bs-btn-border-color: #16A34A; --bs-btn-hover-bg: #15803D; --bs-btn-hover-border-color: #15803D; }
+.hda-bs .btn-danger { --bs-btn-bg: #DC2626; --bs-btn-border-color: #DC2626; --bs-btn-hover-bg: #B91C1C; --bs-btn-hover-border-color: #B91C1C; }
+.hda-bs .btn-outline-primary { --bs-btn-color: var(--hda-blue); --bs-btn-border-color: #BFD0F0; --bs-btn-hover-bg: var(--hda-blue); --bs-btn-hover-border-color: var(--hda-blue); }
+.hda-bs .btn-outline-secondary { --bs-btn-color: #334155; --bs-btn-border-color: #CBD5E1; --bs-btn-hover-bg: #EAF0FB; --bs-btn-hover-color: var(--hda-blue); --bs-btn-hover-border-color: #BFD0F0; }
+.hda-bs .btn-outline-dark { --bs-btn-color: #0F172A; --bs-btn-border-color: #CBD5E1; --bs-btn-hover-bg: #0F172A; --bs-btn-hover-border-color: #0F172A; }
+.hda-bs .btn-outline-danger { --bs-btn-color: #DC2626; --bs-btn-border-color: #FCA5A5; --bs-btn-hover-bg: #DC2626; --bs-btn-hover-border-color: #DC2626; }
+.hda-bs .btn:focus-visible { outline: 3px solid rgba(30,91,184,.35); outline-offset: 2px; }
+
+/* -- Tableaux -- */
+.hda-bs .table { --bs-table-bg: transparent; margin-bottom: 0; border-collapse: separate; border-spacing: 0; }
+.hda-bs .table > :not(caption) > * > * { padding: .85rem .9rem; border-bottom: 1px solid var(--hda-line); }
+.hda-bs .table thead th { background: #F8FAFC !important; color: var(--hda-muted); font-size: .7rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .08em; border-bottom: 1px solid var(--hda-line); white-space: nowrap; }
+.hda-bs .table-hover > tbody > tr:hover > * { --bs-table-bg-state: #F8FAFF; background: #F8FAFF; }
+.hda-bs .table-bordered > :not(caption) > * > * { border: 1px solid var(--hda-line); }
+.hda-bs .table-warning { --bs-table-bg: #FFF7ED; }
+.hda-bs .table-responsive { border-radius: 12px; }
+
+/* -- Badges (pastilles de statut) -- */
+.hda-bs .badge { font-weight: 700; font-size: .74rem; padding: .42em .85em; border-radius: 999px; letter-spacing: .01em; }
+.hda-bs .badge.bg-primary   { background: #DBEAFE !important; color: #1D4ED8 !important; }
+.hda-bs .badge.bg-info      { background: #CFFAFE !important; color: #0E7490 !important; }
+.hda-bs .badge.bg-warning   { background: #FEF3C7 !important; color: #B45309 !important; }
+.hda-bs .badge.bg-success   { background: #DCFCE7 !important; color: #15803D !important; }
+.hda-bs .badge.bg-danger    { background: #FEE2E2 !important; color: #B91C1C !important; }
+.hda-bs .badge.bg-secondary { background: #E2E8F0 !important; color: #475569 !important; }
+.hda-bs .badge.bg-dark      { background: #1E293B !important; color: #fff !important; }
+.hda-bs .badge.bg-light     { background: #F1F5F9 !important; color: #334155 !important; border: 1px solid var(--hda-line) !important; }
+
+/* -- Formulaires -- */
+.hda-bs .form-control, .hda-bs .form-select { border: 1px solid #CBD5E1; border-radius: 10px; background-color: #fff; min-height: 38px; }
+.hda-bs .form-control:focus, .hda-bs .form-select:focus { border-color: var(--hda-blue-2); box-shadow: 0 0 0 4px rgba(30,91,184,.14); }
+.hda-bs .form-label { color: #334155; margin-bottom: .3rem; }
+.hda-bs .input-group > .btn { border-radius: 0 10px 10px 0; }
+
+/* -- Alertes -- */
+.hda-bs .alert { border-radius: 14px; border: 1px solid transparent; }
+.hda-bs .alert-warning { background: #FFF7ED; border-color: #FED7AA; color: #9A3412; }
+.hda-bs .alert-success { background: #F0FDF4; border-color: #BBF7D0; color: #166534; }
+.hda-bs .alert-danger  { background: #FEF2F2; border-color: #FECACA; color: #991B1B; }
+.hda-bs .alert-info    { background: #EFF6FF; border-color: #BFDBFE; color: #1E40AF; }
+
+/* -- Compteurs (KPI) -- */
+.hda-bs .hda-kpi-label { font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--hda-muted); }
+.hda-bs .hda-kpi { font-size: 2rem; font-weight: 800; color: var(--hda-blue); line-height: 1.1; margin-top: .25rem; }
+.hda-bs .table td { vertical-align: middle; }
+.hda-bs .table-responsive { overflow-x: auto; }
+
+.hda-bs .table { font-size: .86rem; }
+.hda-bs .table > :not(caption) > * > * { padding: .75rem .6rem; }
+.hda-bs .card.p-lg-4 { padding: 1rem !important; }
+
+/* Boutons : pas de dégradé, bordure toujours visible */
+.hda-bs .btn { background-image: none !important; border-width: 1px; border-style: solid; --bs-btn-border-width: 1px; }
+.hda-bs .btn-outline-dark, .hda-bs .btn-outline-danger, .hda-bs .btn-outline-primary, .hda-bs .btn-outline-secondary { background-color: #fff; }
+.hda-bs .btn-outline-dark { border-color: #CBD5E1; color: #0F172A; }
+.hda-bs .btn-outline-danger { border-color: #FCA5A5; color: #DC2626; }
+.hda-bs .btn-outline-dark:hover { background: #0F172A; color: #fff; }
+.hda-bs .btn-outline-danger:hover { background: #DC2626; color: #fff; }
+.hda-bs .btn-outline-primary { border-color: #BFD0F0; color: #1E3A8A; }
+.hda-bs .btn-outline-primary:hover { background: #1E3A8A; color: #fff; }
+.hda-bs .btn-warning { background-color: #F97316 !important; border-color: #F97316 !important; color: #fff !important; }
+.hda-bs .btn-warning:hover { background-color: #EA580C !important; border-color: #EA580C !important; }
+.hda-bs .btn-primary { background-color: #1E3A8A !important; border-color: #1E3A8A !important; color: #fff !important; }
+.hda-bs .btn-primary:hover { background-color: #1E5BB8 !important; border-color: #1E5BB8 !important; }
+
+/* V0.8 — responsive : aucun débordement horizontal, même à 320 px / zoom 400 % */
+.hda-bs{overflow-wrap:anywhere}
+.hda-bs table.meta{width:100%;table-layout:fixed}
+.hda-bs table.meta td{word-break:break-word}
+.hda-bs .rounded-circle{flex-shrink:0}
+@media (max-width:360px){.hda-bs .container{padding-left:.75rem;padding-right:.75rem}.hda-bs .card.p-4{padding:1rem!important}}

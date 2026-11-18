@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+
+{% block title %}Espace de Suivi — Demande {{ demande.reference }} | H.D.A GLOBAL{% endblock %}
+
+{% block extra_css %}{% include "partials/bootstrap.html" %}{% endblock %}
+
+{% block content %}
+<div class="hda-bs">
+<div class="bg-primary text-white py-5 border-bottom">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <span class="badge bg-warning text-dark fw-bold px-3 py-2 rounded-pill mb-2">
+                    <i class="bi bi-shield-lock-fill me-1"></i> Espace Client Sécurisé (Sans mot de passe)
+                </span>
+                <h1 class="fw-bold mb-1">Dossier {{ demande.reference }}</h1>
+                <p class="text-light-50 mb-0">Client : <strong>{{ client.nom_complet }}</strong> ({{ client.email }})</p>
+            </div>
+            <div>
+                <span class="badge bg-{{ demande.get_badge_couleur }} fs-6 px-3 py-2">
+                    Statut : {{ demande.get_statut_display }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Colonne Gauche : Détails demande & Devis -->
+        <div class="col-lg-8">
+            <!-- 1. Encart Devis si disponible -->
+            {% if devis_actif %}
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden border-top border-4 border-warning">
+                <div class="card-header bg-white p-4 border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div>
+                        <h4 class="fw-bold mb-0 text-primary">
+                            <i class="bi bi-file-earmark-pdf-fill text-danger me-2"></i> Devis Officiel {{ devis_actif.numero }}
+                        </h4>
+                        <small class="text-muted">Émis le {{ devis_actif.date_emission|date:"d/m/Y" }} — Valable jusqu'au {{ devis_actif.date_validite|date:"d/m/Y" }}</small>
+                    </div>
+                    <span class="badge bg-{{ devis_actif.get_badge_couleur }} px-3 py-2 fs-6">
+                        {{ devis_actif.get_statut_display }}
+                    </span>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Tableau récapitulatif des lignes -->
+                    {% if devis_actif.lignes.all %}
+                    <div class="table-responsive mb-4">
+                        <table class="table table-sm table-striped align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Désignation des prestations</th>
+                                    <th class="text-center">Qté</th>
+                                    <th class="text-center">Unité</th>
+                                    <th class="text-end">P.U. HT (MAD)</th>
+                                    <th class="text-end">Total HT (MAD)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ligne in devis_actif.lignes.all %}
+                                <tr>
+                                    <td class="fw-semibold">{{ ligne.designation }}</td>
+                                    <td class="text-center">{{ ligne.quantite }}</td>
+                                    <td class="text-center">{{ ligne.unite }}</td>
+                                    <td class="text-end">{{ ligne.prix_unitaire_ht }}</td>
+                                    <td class="text-end fw-bold">{{ ligne.total_ligne_ht }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot class="table-group-divider">
+                                <tr>
+                                    <td colspan="4" class="text-end fw-semibold">Sous-total Hors Taxes (HT) :</td>
+                                    <td class="text-end fw-bold">{{ devis_actif.sous_total_ht }} MAD</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-end fw-semibold">TVA ({{ devis_actif.taux_tva }}%) :</td>
+                                    <td class="text-end fw-bold">{{ devis_actif.montant_tva }} MAD</td>
+                                </tr>
+                                <tr class="table-warning">
+                                    <td colspan="4" class="text-end fw-bold fs-5">TOTAL TOUTES TAXES COMPRISES (TTC) :</td>
+                                    <td class="text-end fw-bold fs-5 text-primary">{{ devis_actif.total_ttc }} MAD</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    {% endif %}
+
+                    <!-- Actions Client sur le Devis -->
+                    <div class="p-3 bg-light rounded-3 d-flex flex-wrap justify-content-between align-items-center gap-3">
+                        <a href="{% url 'devis:pdf' token=demande.token_suivi pk=devis_actif.pk %}" class="btn btn-outline-danger fw-bold">
+                            <i class="bi bi-file-earmark-arrow-down-fill me-1"></i> Télécharger le PDF officiel
+                        </a>
+
+                        {% if devis_actif.statut == 'envoye' or devis_actif.statut == 'brouillon' %}
+                        <div class="d-flex gap-2">
+                            <!-- Formulaire Accepter -->
+                            <form method="post" action="{% url 'devis:action_client' token=demande.token_suivi pk=devis_actif.pk %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="accepter">
+                                <button type="submit" class="btn btn-success fw-bold px-4" onclick="return confirm('Confirmez-vous l\'acceptation de ce devis ? Nos équipes planifieront votre chantier.');">
+                                    <i class="bi bi-check-circle-fill me-1"></i> Accepter le devis
+                                </button>
+                            </form>
+
+                            <!-- Bouton Déclencher Refus -->
+                            <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#refusBox" aria-expanded="false">
+                                Refuser...
+                            </button>
+                        </div>
+                        {% elif devis_actif.statut == 'accepte' %}
+                        <div class="badge bg-success bg-opacity-10 text-success p-2 px-3 fw-bold fs-6">
+                            <i class="bi bi-check-circle-fill me-1"></i> Devis Validé & Accepté
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Zone de refus dépliable -->
+                    <div class="collapse mt-3" id="refusBox">
+                        <div class="card card-body bg-light border-0">
+                            <form method="post" action="{% url 'devis:action_client' token=demande.token_suivi pk=devis_actif.pk %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="refuser">
+                                <label class="form-label small fw-bold">Motif du refus (optionnel) :</label>
+                                <textarea name="motif_refus" rows="2" class="form-control mb-2" placeholder="Ex : budget trop élevé, report du projet..."></textarea>
+                                <button type="submit" class="btn btn-danger btn-sm fw-bold">Confirmer le refus du devis</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <!-- Pas encore de devis -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-light">
+                <div class="d-flex align-items-center gap-3">
+                    <i class="bi bi-hourglass-split text-warning fs-1"></i>
+                    <div>
+                        <h5 class="fw-bold mb-1">Votre devis est en cours d'établissement</h5>
+                        <p class="text-muted small mb-0">
+                            Notre métreur analyse actuellement les éléments de votre chantier. Dès que le devis sera prêt, il s'affichera directement ici et vous recevrez une alerte par email.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- 2. Récapitulatif du Chantier -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                <h4 class="fw-bold text-primary mb-3">Informations du Chantier</h4>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <small class="text-muted d-block">Prestation :</small>
+                        <strong>{{ demande.service.nom|default:"Non spécifié" }}</strong>
+                    </div>
+                    <div class="col-sm-6">
+                        <small class="text-muted d-block">Ville du chantier :</small>
+                        <strong>{{ demande.ville_chantier }}</strong>
+                    </div>
+                    <div class="col-12">
+                        <small class="text-muted d-block">Adresse exacte :</small>
+                        <span>{{ demande.adresse_chantier }}</span>
+                    </div>
+                    {% if demande.surface_m2 %}
+                    <div class="col-sm-6">
+                        <small class="text-muted d-block">Surface estimée :</small>
+                        <strong>{{ demande.surface_m2 }} m²</strong>
+                    </div>
+                    {% endif %}
+                    {% if demande.date_souhaitee %}
+                    <div class="col-sm-6">
+                        <small class="text-muted d-block">Date souhaitée d'intervention :</small>
+                        <strong>{{ demande.date_souhaitee|date:"d/m/Y" }}</strong>
+                    </div>
+                    {% endif %}
+                    <div class="col-12">
+                        <small class="text-muted d-block">Description de votre besoin :</small>
+                        <p class="p-3 bg-light rounded text-secondary mb-0" style="white-space: pre-line;">{{ demande.description_besoin }}</p>
+                    </div>
+                </div>
+
+                <!-- Pièces jointes si présentes -->
+                {% if demande.pieces_jointes.all %}
+                <hr class="my-4">
+                <h6 class="fw-bold text-dark mb-3">Photos & Documents joints ({{ demande.pieces_jointes.count }})</h6>
+                <div class="row g-2">
+                    {% for pj in demande.pieces_jointes.all %}
+                    <div class="col-6 col-md-4">
+                        {% if pj.est_image %}
+                        <a href="{{ pj.fichier.url }}" target="_blank">
+                            <img src="{{ pj.fichier.url }}" class="img-fluid rounded border shadow-sm" alt="Photo chantier">
+                        </a>
+                        {% else %}
+                        <a href="{{ pj.fichier.url }}" target="_blank" class="p-3 border rounded d-block text-decoration-none text-dark bg-light">
+                            <i class="bi bi-file-earmark-pdf text-danger fs-3 d-block mb-1"></i>
+                            <small class="text-truncate d-block">{{ pj.nom_original }}</small>
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Colonne Droite : Historique Statut & Contact -->
+        <div class="col-lg-4">
+            <!-- Historique des étapes -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                <h5 class="fw-bold text-primary mb-3">Suivi de l'Avancement</h5>
+                <div class="tracking-timeline">
+                    {% for item in historique %}
+                    <div class="timeline-item {% if forloop.first %}active{% endif %}">
+                        <div class="timeline-dot"></div>
+                        <div class="fw-bold text-dark">{{ item.get_nouveau_statut_display }}</div>
+                        <small class="text-muted d-block">{{ item.date_changement|date:"d/m/Y à H:i" }}</small>
+                        {% if item.commentaire %}
+                        <small class="text-secondary d-block mt-1 fst-italic">{{ item.commentaire }}</small>
+                        {% endif %}
+                    </div>
+                    {% empty %}
+                    <div class="timeline-item active">
+                        <div class="timeline-dot"></div>
+                        <div class="fw-bold text-dark">Demande reçue</div>
+                        <small class="text-muted">{{ demande.created_at|date:"d/m/Y à H:i" }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Hotline Directe -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-light">
+                <h6 class="fw-bold text-dark mb-2">Une question sur ce devis ?</h6>
+                <p class="small text-muted mb-3">
+                    Contactez directement notre responsable commercial en rappelant votre numéro de dossier <strong>{{ demande.reference }}</strong>.
+                </p>
+                <div class="d-grid gap-2">
+                    <a href="tel:{{ parametres.telephone }}" class="btn btn-outline-primary btn-sm fw-bold">
+                        <i class="bi bi-telephone-fill me-1"></i> {{ parametres.telephone }}
+                    </a>
+                    <a href="https://wa.me/{{ parametres.telephone_whatsapp }}?text=Bonjour,%20je%20vous%20contacte%20concernant%20ma%20demande%20{{ demande.reference }}" target="_blank" class="btn btn-success btn-sm fw-bold">
+                        <i class="bi bi-whatsapp me-1"></i> Échanger sur WhatsApp
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+

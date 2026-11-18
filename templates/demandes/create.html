@@ -1,0 +1,315 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Demande de Devis Gratuit — H.D.A GLOBAL Construction TCE{% endblock %}
+
+{% block content %}
+<div class="flex flex-col w-full">
+
+  <!-- HERO compact : en-tête -->
+  <section class="relative bg-[#0b1c38] text-white overflow-hidden pt-36 pb-14">
+    <div class="absolute inset-0 bg-cover bg-center pointer-events-none opacity-60" style="background-image: url('{% static 'img/hero_btp.jpg' %}');"></div>
+    <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(90deg, rgba(0, 16, 45, 0.94) 0%, rgba(0, 16, 45, 0.82) 55%, rgba(0, 16, 45, 0.65) 100%);"></div>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+      <!-- Fil d'Ariane -->
+      <div class="flex items-center gap-1.5 text-xs text-slate-300 mb-4">
+        <a class="hover:text-white hover:underline transition-colors" href="{% url 'core:home' %}">Accueil</a>
+        <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+        <span class="text-secondary font-semibold">Demande de devis</span>
+      </div>
+
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-secondary/50 bg-secondary/15 w-fit backdrop-blur-sm mb-4">
+        <span class="material-symbols-outlined text-secondary text-[16px]">bolt</span>
+        <span class="text-xs uppercase font-extrabold tracking-wider text-orange-400">RÉPONSE SOUS 24–48H</span>
+      </div>
+
+      <h1 class="font-display text-[32px] sm:text-[42px] font-extrabold text-white tracking-tight leading-[1.15] max-w-3xl">
+        Demande de devis <span class="text-secondary">gratuite</span> BTP &amp; travaux
+      </h1>
+      <p class="text-sm sm:text-base text-slate-200 leading-relaxed max-w-2xl mt-3">
+        Remplissez ce formulaire en 2 minutes pour recevoir une estimation officielle, détaillée et sans engagement de votre projet.
+      </p>
+    </div>
+  </section>
+
+  <!-- FORMULAIRE -->
+  <section class="max-w-7xl mx-auto px-6 lg:px-12 py-14 w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+      <!-- Colonne principale : le formulaire -->
+      <form class="lg:col-span-8 flex flex-col gap-6" method="post" enctype="multipart/form-data" action="{% url 'demandes:create' %}">
+        {% csrf_token %}
+
+        <!-- Honeypot anti-spam caché -->
+        <div class="hidden" aria-hidden="true">{{ form.website }}</div>
+
+        <!-- Étape 1 : Coordonnées -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 sm:p-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-display font-extrabold text-sm shrink-0">1</div>
+            <div class="flex flex-col">
+              <h2 class="text-base sm:text-lg font-extrabold text-primary font-display">Vos coordonnées de contact</h2>
+              <span class="text-[11px] text-slate-500 uppercase tracking-wider font-semibold">Qui êtes-vous ?</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="flex flex-col gap-1.5">
+              <label for="id_nom_complet" class="text-xs font-bold text-slate-800 uppercase tracking-wide">Nom complet <span class="text-secondary">*</span></label>
+              <input type="text" name="nom_complet" id="id_nom_complet" value="{{ form.nom_complet.value|default:'' }}" required
+                     class="px-4 py-2.5 rounded-xl border text-sm bg-surface-container-low focus:outline-none focus:ring-2 focus:ring-secondary/40 focus:border-secondary transition-colors {% if form.nom_complet.errors %}border-rose-400 bg-rose-50{% else %}border-outline-variant hover:border-outline{% endif %}"
+                     placeholder="Votre nom et prénom">
+              {% if form.nom_complet.errors %}
+              <span class="text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-2.5 py-1.5 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[15px]">error</span>{{ form.nom_complet.errors.0 }}
+              </span>
+              {% endif %}
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label for="id_telephone" class="text-xs font-bold text-slate-800 uppercase tracking-wide">Téléphone <span class="text-secondary">*</span></label>
+              <input type="tel" name="telephone" id="id_telephone" value="{{ form.telephone.value|default:'' }}" required
+                     class="px-4 py-2.5 rounded-xl border text-sm bg-surface-container-low focus:outline-none focus:ring-2 focus:ring-secondary/40 focus:border-secondary transition-colors {% if form.telephone.errors %}border-rose-400 bg-rose-50{% else %}border-outline-variant hover:border-outline{% endif %}"
+                     placeholder="+212 6XX XXX XXX">
+              {% if form.telephone.errors %}
+              <span class="text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-2.5 py-1.5 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[15px]">error</span>{{ form.telephone.errors.0 }}
+              </span>
+              {% endif %}
+            </div>
+
+            <div class="flex flex-col gap-1.5 md:col-span-2">
+              <label for="id_email" class="text-xs font-bold text-slate-800 uppercase tracking-wide">Email <span class="text-secondary">*</span></label>
+              <input type="email" name="email" id="id_email" value="{{ form.email.value|default:'' }}" required
+                     class="px-4 py-2.5 rounded-xl border text-sm bg-surface-container-low focus:outline-none focus:ring-2 focus:ring-secondary/40 focus:border-secondary transition-colors {% if form.email.errors %}border-rose-400 bg-rose-50{% else %}border-outline-variant hover:border-outline{% endif %}"
+                     placeholder="votre@email.com">
+              <span class="text-[11px] text-slate-500 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[14px]">mail</span>
+                Votre lien de suivi sécurisé et votre devis PDF vous seront transmis à cette adresse.
+              </span>
+              {% if form.email.errors %}
+              <span class="text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-2.5 py-1.5 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[15px]">error</span>{{ form.email.errors.0 }}
+              </span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Étape 2 : Chantier -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 sm:p-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-display font-extrabold text-sm shrink-0">2</div>
+            <div class="flex flex-col">
+              <h2 class="text-base sm:text-lg font-extrabold text-primary font-display">Emplacement du chantier</h2>
+              <span class="text-[11px] text-slate-500 uppercase tracking-wider font-semibold">Où se trouvent les travaux ?</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="flex flex-col gap-1.5">
+              <label for="id_ville_chantier" class="text-xs font-bold text-slate-800 uppercase tracking-wide">Ville du chantier <span class="text-secondary">*</span></label>
+              <select name="ville_chantier" id="id_ville_chantier" required
+                      class="px-4 py-2.5 rounded-xl border text-sm bg-surface-container-low focus:outline-none focus:ring-2 focus:ring-secondary/40 focus:border-secondary transition-colors {% if form.ville_chantier.errors %}border-rose-400 bg-rose-50{% else %}border-outline-variant hover:border-outline{% endif %}">
+                <option value="">— Sélectionner une ville —</option>
+                {% for group, cities in form.fields.ville_chantier.choices %}
+                <optgroup label="{{ group }}">
+                  {% for val, label in cities %}
+                  <option value="{{ val }}" {% if form.ville_chantier.value|stringformat:"s" == val|stringformat:"s" %}selected{% endif %}>{{ label }}</option>
+                  {% endfor %}
+                </optgroup>
+                {% endfor %}
+              </select>
+              {% if form.ville_chantier.errors %}
+              <span class="text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-2.5 py-1.5 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[15px]">error</span>{{ form.ville_chantier.errors.0 }}
+              </span>
+              {% endif %}
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label for="id_service" class="text-xs font-bold text-slate-800 uppercase tracking-wide">Type de prestation <span class="text-secondary">*</span></label>
+              <select name="service" id="id_service" required
+                      class="px-4 py-2.5 rounded-xl border text-sm bg-surface-container-low focus:outline-none focus:ring-2 focus:ring-secondary/40 focus:border-secondary transition-colors {% if form.service.errors %}border-rose-400 bg-rose-50{% else %}border-outline-variant hover:border-outline{% endif %}">
+                <option value="">— Sélectionner un service —</option>
+                {% for s in form.fields.service.queryset %}
+                <option value="{{ s.id }}" {% if form.service.value|stringformat:"s" == s.id|stringformat:"s" %}selected{% endif %}>{{ s.nom }}</option>
+                {% endfor %}
+              </select>
+              {% if form.service.errors %}
+              <span class="text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-2.5 py-1.5 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[15px]">error</span>{{ form.service.errors.0 }}
+              </span>
+              {% endif %}
+            </div>
+
+            <div class="flex flex-col gap-1.5 md:col-span-2">
+              <label for="id_adresse_chantier" class="text-xs font-bold text-slate-800 uppercase tracking-wide">Adresse complète du chantier <span class="text-secondary">*</span></label>
+              <textarea name="adresse_chantier" id="id_adresse_chantier" rows="2" required
+                        class="px-4 py-2.5 rounded-xl border text-sm bg-surface-container-low focus:outline-none focus:ring-2 focus:ring-secondary/40 focus:border-secondary transition-colors resize-y {% if form.adresse_chantier.errors %}border-rose-400 bg-rose-50{% else %}border-outline-variant hover:border-outline{% endif %}"
+                        placeholder="Numéro, rue, quartier, résidence, commune...">{{ form.adresse_chantier.value|default:'' }}</textarea>
+              {% if form.adresse_chantier.errors %}
+              <span class="text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-2.5 py-1.5 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[15px]">error</span>{{ form.adresse_chantier.errors.0 }}
+              </span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Étape 3 : Détails du projet -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 sm:p-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-display font-extrabold text-sm shrink-0">3</div>
+            <div class="flex flex-col">
+              <h2 class="text-base sm:text-lg font-extrabold text-primary font-display">Détails &amp; photos du projet</h2>
+              <span class="text-[11px] text-slate-500 uppercase tracking-wider font-semibold">Plus de détails = devis plus précis</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="flex flex-col gap-1.5">
+              <label for="id_surface_m2" class="text-xs font-bold text-slate-800 uppercase tracking-wide">Surface estimée (m²)</label>
+              <input type="number" step="0.1" min="0" name="surface_m2" id="id_surface_m2" value="{{ form.surface_m2.value|default:'' }}"
+                     class="px-4 py-2.5 rounded-xl border border-outline-variant hover:border-outline text-sm bg-surface-container-low focus:outline-none focus:ring-2 focus:ring-secondary/40 focus:border-secondary transition-colors"
+                     placeholder="Ex : 85.5">
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label for="id_date_souhaitee" class="text-xs font-bold text-slate-800 uppercase tracking-wide">Date souhaitée d'intervention</label>
+              <input type="date" name="date_souhaitee" id="id_date_souhaitee" value="{{ form.date_souhaitee.value|default:'' }}"
+                     class="px-4 py-2.5 rounded-xl border border-outline-variant hover:border-outline text-sm bg-surface-container-low focus:outline-none focus:ring-2 focus:ring-secondary/40 focus:border-secondary transition-colors">
+            </div>
+
+            <div class="flex flex-col gap-1.5 md:col-span-2">
+              <label for="id_description_besoin" class="text-xs font-bold text-slate-800 uppercase tracking-wide">Description du projet <span class="text-secondary">*</span></label>
+              <textarea name="description_besoin" id="id_description_besoin" rows="4" required
+                        class="px-4 py-2.5 rounded-xl border text-sm bg-surface-container-low focus:outline-none focus:ring-2 focus:ring-secondary/40 focus:border-secondary transition-colors resize-y {% if form.description_besoin.errors %}border-rose-400 bg-rose-50{% else %}border-outline-variant hover:border-outline{% endif %}"
+                        placeholder="Décrivez votre projet avec le maximum de détails : nature des travaux, contraintes d'accès, matériaux souhaités...">{{ form.description_besoin.value|default:'' }}</textarea>
+              {% if form.description_besoin.errors %}
+              <span class="text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-2.5 py-1.5 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[15px]">error</span>{{ form.description_besoin.errors.0 }}
+              </span>
+              {% endif %}
+            </div>
+
+            <div class="flex flex-col gap-1.5 md:col-span-2">
+              <label for="id_photos" class="text-xs font-bold text-slate-800 uppercase tracking-wide">Photos du chantier <span class="text-slate-400">(optionnel)</span></label>
+              <label id="drop-zone" class="flex flex-col items-center justify-center gap-2 px-6 py-8 rounded-xl border-2 border-dashed border-outline-variant hover:border-secondary hover:bg-orange-50/40 cursor-pointer transition-colors text-center">
+                <span class="material-symbols-outlined text-[36px] text-secondary">add_photo_alternate</span>
+                <span class="text-xs font-bold text-slate-700">Cliquez pour sélectionner vos photos</span>
+                <span class="text-[11px] text-slate-500">ou glissez-déposez ici — plusieurs fichiers acceptés</span>
+                <input type="file" name="photos" id="id_photos" multiple accept="image/*,.pdf" class="hidden">
+              </label>
+              <span class="text-[11px] text-slate-500 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[14px]">info</span>
+                Formats acceptés : JPEG, PNG, WEBP, PDF — 10 Mo max par fichier.
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Boutons d'action -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <button type="submit"
+                  class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold text-white bg-secondary hover:bg-secondary-hover shadow-lg shadow-orange-950/20 transition-all transform hover:-translate-y-0.5 active:scale-95 text-sm">
+            <span class="material-symbols-outlined text-[20px]">send</span>
+            <span>Envoyer ma demande de devis</span>
+          </button>
+          <span class="text-[11px] text-slate-500 sm:max-w-[240px] flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[14px]">lock</span>
+            Données confidentielles — jamais partagées avec des tiers.
+          </span>
+        </div>
+      </form>
+
+      <!-- Sidebar réassurance -->
+      <aside class="lg:col-span-4 flex flex-col gap-6">
+        <div class="bg-primary text-white rounded-2xl p-6 shadow-lg relative overflow-hidden">
+          <div class="absolute -right-16 -bottom-16 w-56 h-56 rounded-full bg-secondary/15 blur-3xl pointer-events-none"></div>
+          <div class="relative z-10 flex flex-col gap-5">
+            <div class="flex items-center gap-2.5">
+              <span class="material-symbols-outlined text-secondary text-[24px]">verified</span>
+              <h3 class="text-base font-bold font-display">Nos Engagements Devis</h3>
+            </div>
+            <ul class="flex flex-col gap-4 text-xs">
+              <li class="flex items-start gap-2.5">
+                <span class="material-symbols-outlined text-emerald-400 text-[18px] mt-0.5 shrink-0">check_circle</span>
+                <span class="text-slate-200 leading-relaxed"><strong class="text-white">100% gratuit &amp; sans engagement</strong> — recevez un chiffrage officiel sans obligation.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="material-symbols-outlined text-emerald-400 text-[18px] mt-0.5 shrink-0">check_circle</span>
+                <span class="text-slate-200 leading-relaxed"><strong class="text-white">Réponse sous 24h à 48h</strong> — notre métreur étudie vos photos et descriptif immédiatement.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="material-symbols-outlined text-emerald-400 text-[18px] mt-0.5 shrink-0">check_circle</span>
+                <span class="text-slate-200 leading-relaxed"><strong class="text-white">Portail de suivi sans mot de passe</strong> — accès direct sécurisé pour valider votre devis en 1 clic.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="material-symbols-outlined text-emerald-400 text-[18px] mt-0.5 shrink-0">check_circle</span>
+                <span class="text-slate-200 leading-relaxed"><strong class="text-white">Devis PDF certifié</strong> — calcul HT / TVA 20% conforme aux normes fiscales marocaines.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm text-center flex flex-col items-center gap-2">
+          <div class="w-12 h-12 rounded-xl bg-blue-50 text-primary flex items-center justify-center">
+            <span class="material-symbols-outlined text-[26px]">support_agent</span>
+          </div>
+          <h3 class="text-sm font-bold text-primary font-display">Besoin d'aide pour remplir ?</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Notre équipe commerciale peut prendre votre demande directement par téléphone ou WhatsApp.
+          </p>
+          <a class="mt-2 w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-primary bg-white border border-slate-300 hover:bg-slate-50 transition-colors" href="tel:{{ parametres.telephone }}">
+            <span class="material-symbols-outlined text-[18px]">call</span>
+            <span>{{ parametres.telephone }}</span>
+          </a>
+          <a class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs sm:text-sm font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 transition-colors" href="https://wa.me/{% if parametres.telephone_whatsapp %}{{ parametres.telephone_whatsapp }}{% else %}212661103988{% endif %}" target="_blank" rel="noopener noreferrer">
+            <span class="material-symbols-outlined text-[18px]">chat</span>
+            <span>Écrire sur WhatsApp</span>
+          </a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</div>
+
+<!-- Amélioration du champ upload multi-fichiers -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var input = document.getElementById('id_photos');
+    var zone = document.getElementById('drop-zone');
+    var hint = zone.querySelector('span.font-bold');
+    if (!input || !zone) return;
+
+    function refreshLabel() {
+      var n = input.files.length;
+      if (n > 0 && hint) {
+        hint.textContent = n === 1
+          ? input.files[0].name
+          : n + ' fichiers sélectionnés';
+      }
+    }
+    input.addEventListener('change', refreshLabel);
+
+    ['dragover', 'dragleave', 'drop'].forEach(function (evt) {
+      zone.addEventListener(evt, function (e) {
+        e.preventDefault();
+        if (evt === 'dragover') {
+          zone.classList.add('bg-orange-50');
+        } else {
+          zone.classList.remove('bg-orange-50');
+        }
+      });
+    });
+    zone.addEventListener('drop', function (e) {
+      if (e.dataTransfer.files.length) {
+        input.files = e.dataTransfer.files;
+        input.dispatchEvent(new Event('change'));
+      }
+    });
+  });
+</script>
+{% endblock %}

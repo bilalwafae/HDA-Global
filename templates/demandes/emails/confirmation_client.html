@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; background: #f4f6f9; padding: 20px; }
+        .card { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header { background: #1E3A8A; color: #ffffff; padding: 24px; text-align: center; }
+        .content { padding: 30px; }
+        .btn { display: inline-block; padding: 12px 24px; background: #F97316; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 20px; }
+        .footer { background: #f8fafc; padding: 15px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0; }
+        .info-box { background: #f8fafc; border-left: 4px solid #1E3A8A; padding: 12px 16px; margin: 20px 0; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <img src="cid:logo_hda" alt="H.D.A GLOBAL" height="52" style="display:inline-block;background:#ffffff;border-radius:10px;padding:6px 14px;">
+            <p style="margin:5px 0 0 0; font-size:13px; opacity:0.9;">Construction TCE & Aménagement</p>
+        </div>
+        <div class="content">
+            <h3>Bonjour {{ demande.client.nom_complet }},</h3>
+            <p>Nous vous confirmons la bonne réception de votre demande de devis pour vos travaux de BTP.</p>
+            
+            <div class="info-box">
+                <strong>Référence de votre dossier :</strong> {{ demande.reference }}<br>
+                <strong>Prestation :</strong> {{ demande.service.nom|default:"Non spécifié" }}<br>
+                <strong>Ville du chantier :</strong> {{ demande.ville_chantier }}<br>
+                <strong>Date de la demande :</strong> {{ demande.created_at|date:"d/m/Y à H:i" }}
+            </div>
+
+            <p>Notre bureau d'études analyse actuellement votre demande et vos pièces jointes pour vous établir un devis clair et détaillé sous 24 à 48 heures.</p>
+
+            <p>Vous pouvez suivre l'avancement de votre dossier à tout moment sans mot de passe :</p>
+            
+            <div style="text-align: center;">
+                <a href="{{ site_url }}/suivi/{{ demande.token_suivi }}/" class="btn">
+                    Accéder à mon espace de suivi
+                </a>
+            </div>
+
+            <p style="margin-top: 30px; font-size: 13px; color: #64748b;">
+                Besoin d'une précision urgente ? Contactez-nous par téléphone au <strong>{{ hda_phone }}</strong> en rappelant votre référence <strong>{{ demande.reference }}</strong>.
+            </p>
+        </div>
+        <div class="footer">
+            H.D.A GLOBAL SARL — Beni Yakhlef, Mohammedia & Casablanca, Maroc
+        </div>
+    </div>
+</body>
+</html>
+

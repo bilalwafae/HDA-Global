@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ service.nom }} — H.D.A GLOBAL Maroc{% endblock %}
+
+{% block content %}
+<div class="bg-slate-50 min-h-screen py-10">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+
+    <!-- Top Header & Breadcrumb -->
+    <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-slate-200">
+      <div>
+        <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2 font-medium" aria-label="Breadcrumb">
+          <a href="{% url 'core:home' %}" class="hover:text-primary transition-colors flex items-center gap-1">
+            <span class="material-symbols-outlined text-[15px]">home</span>
+            <span>Accueil</span>
+          </a>
+          <span>/</span>
+          <a href="{% url 'services:list' %}" class="hover:text-primary transition-colors">Services</a>
+          <span>/</span>
+          <span class="text-secondary font-semibold">{{ service.nom }}</span>
+        </nav>
+        <h1 class="font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold text-primary tracking-tight">
+          {{ service.nom }}
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed">
+          {{ service.description_courte }}
+        </p>
+      </div>
+
+      <div class="flex items-center gap-3 self-start md:self-auto">
+        <a href="{% url 'demandes:create' %}?service={{ service.slug }}" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-bold text-white bg-secondary hover:bg-secondary-hover shadow-md shadow-secondary/20 transition-all transform active:scale-95">
+          <span class="material-symbols-outlined text-[18px]">assignment</span>
+          <span>Demander ce service</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Main Content Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+      <!-- Left Column (col 8) : Photo, Description, Steps, Gallery -->
+      <div class="lg:col-span-8 flex flex-col gap-6">
+
+        <!-- Main Photo Banner -->
+        {% if service.image_principale %}
+        <div class="w-full h-72 sm:h-96 rounded-2xl overflow-hidden shadow-sm border border-slate-200 relative group">
+          <img src="{{ service.image_principale.url }}" alt="{{ service.nom }}" class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500">
+          <div class="absolute top-4 right-4 bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow-md">
+            {{ service.prix_affiche }}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Présentation du Service Card -->
+        <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/90 shadow-sm">
+          <div class="flex items-center gap-2.5 mb-4">
+            <div class="w-9 h-9 rounded-xl bg-blue-50 text-primary flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-[20px]">info</span>
+            </div>
+            <h2 class="font-display text-xl font-bold text-primary">Présentation du Service</h2>
+          </div>
+          <div class="text-slate-700 text-sm leading-relaxed space-y-4">
+            {{ service.description_complete|linebreaks }}
+          </div>
+        </div>
+
+        <!-- Étapes de Réalisation du Chantier -->
+        {% if service.get_etapes_list %}
+        <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/90 shadow-sm">
+          <div class="flex items-center gap-2.5 mb-6">
+            <div class="w-9 h-9 rounded-xl bg-orange-50 text-secondary flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-[20px]">format_list_numbered</span>
+            </div>
+            <div>
+              <h2 class="font-display text-xl font-bold text-primary">Étapes de Réalisation du Chantier</h2>
+              <p class="text-xs text-slate-500 mt-0.5">Méthodologie standardisée pour garantir qualité et respect des délais</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 gap-3.5">
+            {% for etape in service.get_etapes_list %}
+            <div class="flex items-start gap-3.5 p-4 rounded-xl bg-slate-50 border border-slate-100 hover:bg-blue-50/40 hover:border-blue-100 transition-colors">
+              <div class="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center font-display font-extrabold text-xs shrink-0 shadow-xs">
+                {{ forloop.counter }}
+              </div>
+              <div class="pt-1 text-xs sm:text-sm font-semibold text-primary leading-normal">
+                {{ etape }}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Galerie de Photos / Réalisations Récentes -->
+        {% if galerie %}
+        <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/90 shadow-sm">
+          <div class="flex items-center gap-2.5 mb-5">
+            <div class="w-9 h-9 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center font-bold">
+              <span class="material-symbols-outlined text-[20px]">photo_library</span>
+            </div>
+            <div>
+              <h2 class="font-display text-xl font-bold text-primary">Réalisations &amp; Chantiers Récents</h2>
+              <p class="text-xs text-slate-500 mt-0.5">Photographies prises sur sites à Casablanca et Mohammedia</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {% for photo in galerie %}
+            <div class="rounded-xl overflow-hidden border border-slate-200 group">
+              <div class="h-48 overflow-hidden bg-slate-100">
+                <img src="{{ photo.image.url }}" alt="{{ photo.legende|default:service.nom }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+              {% if photo.legende %}
+              <div class="p-3 bg-white text-xs text-slate-600 font-medium">
+                {{ photo.legende }}
+              </div>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Warranty Commitment Banner -->
+        <div class="p-5 rounded-2xl bg-gradient-to-r from-primary to-primary-container text-white flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-secondary text-[32px]">shield</span>
+            <div>
+              <h4 class="font-display text-sm font-bold">Garantie Décennale &amp; Responsabilité Civile</h4>
+              <p class="text-xs text-slate-300 mt-0.5">Tous nos chantiers sont couverts par contrat avec PV de réception formel.</p>
+            </div>
+          </div>
+          <span class="text-xs font-bold px-3 py-1 rounded-full bg-secondary text-white shrink-0">100% Conforme</span>
+        </div>
+
+      </div>
+
+      <!-- Right Column (col 4) : Pricing Widget & Other Services -->
+      <div class="lg:col-span-4 flex flex-col gap-6 sticky top-28">
+
+        <!-- Tarification Indicative Box -->
+        <div class="bg-white rounded-2xl p-6 border-2 border-amber-400 shadow-sm flex flex-col">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs uppercase font-extrabold tracking-wider text-slate-500">Tarification Indicative</span>
+            <span class="text-[10px] bg-amber-50 text-amber-800 font-bold px-2 py-0.5 rounded">TCE Maroc</span>
+          </div>
+
+          <div class="my-2">
+            <div class="text-2xl sm:text-3xl font-extrabold text-primary font-display">
+              {{ service.prix_affiche }}
+            </div>
+          </div>
+
+          <p class="text-xs text-slate-500 leading-relaxed mb-6">
+            Le tarif final dépend de la configuration du chantier, des matériaux retenus et des métrés précis constatés lors du diagnostic initial.
+          </p>
+
+          <div class="flex flex-col gap-3">
+            <a class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-secondary hover:bg-secondary-hover shadow-md shadow-secondary/20 transition-all transform active:scale-95" href="{% url 'demandes:create' %}?service={{ service.slug }}">
+              <span class="material-symbols-outlined text-[18px]">description</span>
+              <span>Demander un devis gratuit</span>
+            </a>
+            <a class="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs sm:text-sm font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 transition-colors" href="https://wa.me/212661103988?text=Bonjour,%20je%20suis%20intéressé%20par%20votre%20prestation%20{{ service.nom|urlencode }}" target="_blank">
+              <span class="material-symbols-outlined text-[18px] text-emerald-600">chat</span>
+              <span>Poser une question WhatsApp</span>
+            </a>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+            <span class="flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px] text-emerald-600">check_circle</span>
+              Déplacement gratuit
+            </span>
+            <span>Réponse sous 24h</span>
+          </div>
+        </div>
+
+        <!-- Autres Prestations BTP Card -->
+        <div class="bg-white rounded-2xl p-6 border border-slate-200/90 shadow-sm flex flex-col">
+          <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">AUTRES PRESTATIONS BTP</h4>
+            <a href="{% url 'services:list' %}" class="text-[11px] font-semibold text-secondary hover:underline">Voir tout</a>
+          </div>
+
+          <div class="flex flex-col divide-y divide-slate-100 text-xs">
+            {% for autre in autres_services %}
+            <div class="py-3 first:pt-0 last:pb-0 flex items-center justify-between group">
+              <div class="flex flex-col pr-2">
+                <a class="font-bold text-primary group-hover:text-secondary transition-colors" href="{% url 'services:detail' autre.slug %}">
+                  {{ autre.nom }}
+                </a>
+                <span class="text-slate-500 text-[11px] mt-0.5">{{ autre.prix_affiche }}</span>
+              </div>
+              <a href="{% url 'services:detail' autre.slug %}" class="p-1 rounded-lg text-slate-400 group-hover:text-primary group-hover:bg-slate-100 transition-colors">
+                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+              </a>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Assistance Téléphonique Directe -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-sm flex items-center gap-3.5">
+          <div class="w-11 h-11 rounded-xl bg-primary text-white flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-[20px] text-secondary">call</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-[10px] uppercase font-bold text-slate-400">Permanence Chantiers</span>
+            <a href="tel:+212661103988" class="font-display font-extrabold text-sm text-primary hover:text-secondary transition-colors">
+              +212 661 103 988
+            </a>
+            <span class="text-[10px] text-slate-500">Lun - Sam : 08h00 — 18h30</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}

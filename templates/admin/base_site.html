@@ -1,0 +1,48 @@
+{% extends "admin/base_site.html" %}{% load static %}
+{% comment %}
+Refonte moderne de l'interface admin H.D.A GLOBAL :
+- styles exclusivement depuis static/css/admin_hda.css (aucun <style> inline) ;
+- Plus Jakarta Sans (Google Fonts) + thème clair forcé
+  (<meta name="color-scheme" content="light"> + variables CSS) ;
+- logo de l'entreprise (static/img/logo_hda.png, le MÊME logo que le site, le PDF et les emails) dans une puce blanche ;
+- admin_hda.css est AUSSI rechargé dans le block « responsive » : il passe
+  ainsi APRÈS admin/css/responsive.css — dernier de la cascade.
+Aucune modification des vues, modèles, formulaires ou URLs : apparence seule.
+{% endcomment %}
+
+{% block title %}{{ title }} | {{ site_title }}{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/admin_hda.css' %}">
+{% endblock %}
+
+{% block responsive %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/admin_hda.css' %}">
+{% endblock %}
+
+{% block branding %}
+<div id="site-name">
+    <h1 id="site-name">
+        <a href="{% url 'admin:index' %}">
+            <span class="hda-logo-pastille">
+                <img src="{% static 'img/logo_hda.png' %}" alt="Logo H.D.A GLOBAL">
+            </span>
+            <span class="hda-sub">Administration</span>
+        </a>
+        {% if user.is_staff %}<a href="{% url 'assistant:chat' %}" class="btn-assistant-pill">&#10024;&nbsp;Assistant IA</a>{% endif %}
+        <a href="{% url 'core:dashboard' %}" class="btn-dashboard-pill" target="_blank">
+            &#128202;&nbsp;Tableau de bord exécutif
+        </a>
+    </h1>
+</div>
+{% endblock %}
+
+{% block welcome-msg %}
+<p>Bonjour, <strong>{{ user.get_username }}</strong></p>
+{% endblock %}
